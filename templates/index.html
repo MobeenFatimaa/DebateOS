@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Debate Arena</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Custom scrollbar styling */
+        #chat-box::-webkit-scrollbar { width: 6px; }
+        #chat-box::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        #chat-box::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 9999px; }
+        #chat-box::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 sm:p-6 font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-indigo-950 to-slate-950">
+
+    <div class="w-full max-w-4xl flex flex-col gap-6">
+
+        <!-- Header -->
+        <header class="text-center space-y-2">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent flex items-center justify-center gap-3">
+                <span>⚔️</span> Gemini Debate Arena
+            </h1>
+            <p class="text-slate-400 text-sm">Engineered for logical combat using Google's Gemini Flash</p>
+        </header>
+
+        <!-- Configuration Panel -->
+        <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-2xl space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Gemini API Key</label>
+                <input type="password" id="apiKey" placeholder="Paste key (e.g., AIzaSy...)" 
+                    class="w-full bg-slate-950/80 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Debate Topic</label>
+                    <input type="text" id="topic" value="Artificial Intelligence will do more good than harm." 
+                        class="w-full bg-slate-950/80 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Your Stance</label>
+                    <select id="userStance" class="w-full bg-slate-950/80 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition cursor-pointer">
+                        <option value="FOR (Pro)">I am FOR (Pro)</option>
+                        <option value="AGAINST (Con)">I am AGAINST (Con)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debate Chat Arena -->
+        <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-col h-[520px]">
+            
+            <!-- Chat Container -->
+            <div id="chat-box" class="flex-1 overflow-y-auto space-y-4 pr-2 mb-4">
+                <div class="text-center py-6 text-slate-500 text-sm italic">
+                    Configure your stance above and fire the opening argument to start the match!
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="relative flex items-center gap-2 pt-2 border-t border-slate-800/80">
+                <input type="text" id="userInput" placeholder="Formulate your counter-argument..." 
+                    onkeydown="if(event.key==='Enter') sendArgument()"
+                    class="w-full bg-slate-950/90 border border-slate-700/60 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition pr-24">
+                
+                <button id="sendBtn" onclick="sendArgument()" 
+                    class="absolute right-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium text-sm rounded-lg shadow-lg shadow-blue-500/20 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chatHistory = [];
+
+        async function sendArgument() {
+            const apiKey = document.getElementById("apiKey").value.trim();
+            const topic = document.getElementById("topic").value.trim();
+            const userStance = document.getElementById("userStance").value;
+            const inputField = document.getElementById("userInput");
+            const sendBtn = document.getElementById("sendBtn");
+            const userText = inputField.value.trim();
+
+            if (!apiKey) return alert("Please enter your Gemini API key.");
+            if (!userText) return;
+
+            // Clear empty arena banner if present
+            const chatBox = document.getElementById("chat-box");
+            if (chatHistory.length === 0) chatBox.innerHTML = "";
+
+            // Render User Message
+            appendMessage("user", userText);
+            chatHistory.push({ role: "user", content: userText });
+            inputField.value = "";
+
+            toggleLoading(true);
+            const loadingIndicator = appendThinkingIndicator();
+
+            try {
+                const response = await fetch("/api/debate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        api_key: apiKey,
+                        topic: topic,
+                        user_stance: userStance,
+                        history: chatHistory
+                    })
+                });
+
+                const data = await response.json();
+                loadingIndicator.remove();
+
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    appendMessage("ai", data.reply);
+                    chatHistory.push({ role: "assistant", content: data.reply });
+                }
+            } catch (err) {
+                loadingIndicator.remove();
+                alert("Failed to reach server: " + err);
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const chatBox = document.getElementById("chat-box");
+            const wrapper = document.createElement("div");
+            wrapper.className = `flex flex-col ${sender === 'user' ? 'items-end' : 'items-start'} space-y-1`;
+
+            const badge = document.createElement("span");
+            badge.className = "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-slate-400";
+            badge.innerText = sender === "user" ? "You" : "Gemini AI";
+
+            const bubble = document.createElement("div");
+            
+            if (sender === "user") {
+                bubble.className = "max-w-[85%] sm:max-w-[75%] bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none shadow-md text-sm leading-relaxed";
+                bubble.textContent = text;
+            } else {
+                bubble.className = "max-w-[85%] sm:max-w-[75%] bg-slate-800/80 border border-slate-700/50 text-slate-200 p-3.5 rounded-2xl rounded-tl-none shadow-md text-sm leading-relaxed prose prose-invert max-w-none";
+                bubble.innerHTML = marked.parse(text);
+            }
+
+            wrapper.appendChild(badge);
+            wrapper.appendChild(bubble);
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendThinkingIndicator() {
+            const chatBox = document.getElementById("chat-box");
+            const wrapper = document.createElement("div");
+            wrapper.className = "flex items-center gap-2 text-slate-400 text-xs italic py-2 px-1";
+            wrapper.innerHTML = `
+                <div class="flex gap-1">
+                    <span class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></span>
+                    <span class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                </div>
+                <span>Formulating counter-argument...</span>
+            `;
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return wrapper;
+        }
+
+        function toggleLoading(isLoading) {
+            document.getElementById("userInput").disabled = isLoading;
+            document.getElementById("sendBtn").disabled = isLoading;
+        }
+    </script>
+</body>
+</html>
