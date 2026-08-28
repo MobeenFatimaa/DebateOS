@@ -1,289 +1,193 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DebateOS — AI Argument Matrix</title>
-    <!-- Tailwind CSS CDN -->
+    <title>DebateOS — ARIA Intelligence Matrix</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Marked.js for Markdown Parsing -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        #chat-box::-webkit-scrollbar { width: 5px; }
-        #chat-box::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.4); }
-        #chat-box::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 9999px; }
-    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex overflow-hidden font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+<body class="bg-black text-neutral-100 min-h-screen flex flex-col font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/40 via-neutral-950 to-black">
 
-    <!-- Sidebar Navigation -->
-    <aside class="w-64 bg-slate-900/80 backdrop-blur-2xl border-r border-slate-800/80 flex flex-col justify-between p-4 z-20">
-        <div class="space-y-6">
-            <!-- App Brand -->
-            <div class="flex items-center gap-3 px-2 py-1">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-blue-500/30">
-                    D
-                </div>
-                <div>
-                    <h1 class="font-extrabold tracking-tight text-lg leading-none bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">DebateOS</h1>
-                    <span class="text-[10px] uppercase tracking-wider text-blue-400 font-semibold">v2.5 Matrix Edition</span>
-                </div>
-            </div>
-
-            <!-- Nav Links -->
-            <nav class="space-y-1">
-                <button onclick="switchView('arena')" id="nav-arena" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition bg-blue-600/20 text-blue-400 border border-blue-500/30">
-                    <span>⚔️</span> Arena
-                </button>
-                <button onclick="switchView('analytics')" id="nav-analytics" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                    <span>📊</span> Match Analytics
-                </button>
-                <button onclick="switchView('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
-                    <span>⚙️</span> OS Settings
-                </button>
-            </nav>
-        </div>
-
-        <!-- Session Monitor -->
-        <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 text-xs space-y-1">
-            <div class="flex items-center justify-between text-slate-400">
-                <span>Engine Status</span>
-                <span class="flex h-2 w-2 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-            </div>
-            <p class="font-mono text-slate-300 truncate" id="active-model-display">Gemini-2.5-Flash</p>
-        </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
-
-        <!-- Top Header -->
-        <header class="h-16 border-b border-slate-800/80 bg-slate-900/40 backdrop-blur-xl flex items-center justify-between px-6 z-10">
-            <h2 id="view-title" class="text-base font-bold text-slate-200 tracking-wide flex items-center gap-2">
-                <span>⚔️</span> Debate Arena
-            </h2>
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-xl border-b border-red-900/30">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <button onclick="resetDebate()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
-                    Reset Session
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-700 to-rose-600 flex items-center justify-center font-black text-white shadow-lg shadow-red-600/40">
+                    A
+                </div>
+                <span class="font-extrabold tracking-tight text-lg text-white">Debate<span class="text-red-500">OS</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
+                <a href="#aria-profile" class="hover:text-red-400 transition">Meet ARIA</a>
+                <a href="#educational-framework" class="hover:text-red-400 transition">Educational Purpose</a>
+                <a href="javascript:void(0)" onclick="openModal()" class="hover:text-red-400 transition">API Settings</a>
+            </div>
+
+            <button onclick="openModal()" class="px-5 py-2 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-medium text-sm rounded-xl shadow-lg shadow-red-600/30 transition active:scale-95">
+                Enter Arena ⚔️
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6 max-w-5xl mx-auto text-center space-y-8 flex-1 flex flex-col justify-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/60 border border-red-800/40 text-red-400 text-xs font-semibold">
+            <span>⚡ Powered by ARIA (Adversarial Reasoning Intelligence)</span>
+        </div>
+        <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight bg-gradient-to-r from-white via-neutral-200 to-red-400 bg-clip-text text-transparent">
+            Sharpen Your Arguments Against ARIA
+        </h1>
+        <p class="text-neutral-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            "I'll challenge your assumptions, expose weak reasoning, and provide real-time educational breakdowns to master critical thinking."
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <button onclick="openModal()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-bold text-base rounded-xl shadow-xl shadow-red-600/30 transition active:scale-95">
+                Initialize ARIA Arena
+            </button>
+            <a href="#educational-framework" class="w-full sm:w-auto px-8 py-3.5 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold text-base rounded-xl border border-neutral-800 transition">
+                Explore Educational Purpose
+            </a>
+        </div>
+    </section>
+
+    <!-- Educational Framework Preview Section -->
+    <section id="educational-framework" class="py-20 px-6 max-w-4xl mx-auto space-y-8 border-t border-neutral-900">
+        <div class="text-center space-y-3">
+            <h2 class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">LEARNING ARCHITECTURE</h2>
+            <p class="text-2xl sm:text-3xl font-black text-white">Why This Argument Was Challenged</p>
+            <p class="text-sm text-neutral-400 max-w-xl mx-auto">
+                Beyond standard counter-arguments, ARIA exposes structural flaws in your reasoning so you can systematically inspect and expand each critique note.
+            </p>
+        </div>
+
+        <div class="space-y-3 max-w-2xl mx-auto">
+            <!-- Item 1 -->
+            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
+                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
+                    <span class="flex items-center gap-3">
+                        <span class="text-red-500 font-bold">01</span>
+                        <span class="font-semibold text-sm">Unsupported assumption</span>
+                    </span>
+                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
+                </button>
+                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
+                    ARIA detects unverified premises treated as absolute facts, prompting you to justify foundational beliefs before building further conclusions.
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
+                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
+                    <span class="flex items-center gap-3">
+                        <span class="text-red-500 font-bold">02</span>
+                        <span class="font-semibold text-sm">Missing evidence</span>
+                    </span>
+                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
+                </button>
+                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
+                    Identifies generalized claims lacking verifiable citations, empirical metrics, or concrete data points to back up core assertions.
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
+                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
+                    <span class="flex items-center gap-3">
+                        <span class="text-red-500 font-bold">03</span>
+                        <span class="font-semibold text-sm">Weak causal relationship</span>
+                    </span>
+                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
+                </button>
+                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
+                    Highlights logical fallacies where simple correlation is incorrectly mistaken for direct causation without valid bridging mechanisms.
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
+                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
+                    <span class="flex items-center gap-3">
+                        <span class="text-red-500 font-bold">04</span>
+                        <span class="font-semibold text-sm">Alternative explanation exists</span>
+                    </span>
+                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
+                </button>
+                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
+                    Exposes competing variables and alternate trajectories that could fully explain the phenomenon just as well or better than your premise.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-neutral-900 bg-black py-8 px-6 text-center text-neutral-600 text-xs">
+        <p>© 2026 DebateOS. Powered by Google Gemini & ARIA Intelligence Engine.</p>
+    </footer>
+
+    <!-- Interactive API Key Modal -->
+    <div id="api-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-neutral-950 border border-red-900/40 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl shadow-red-950/50 relative">
+            <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
+                <h3 class="font-bold text-neutral-100 flex items-center gap-2">🔑 Configure Gemini API Key</h3>
+                <button onclick="closeModal()" class="text-neutral-500 hover:text-neutral-300">✕</button>
+            </div>
+
+            <p class="text-xs text-neutral-400 leading-relaxed">
+                Provide your Gemini API key to launch ARIA. Get a free key at <a href="https://aistudio.google.com/" target="_blank" class="text-red-400 underline">Google AI Studio</a>.
+            </p>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-semibold text-neutral-300">API Key</label>
+                <input type="password" id="modalApiKey" placeholder="Paste your key here (AIzaSy...)" 
+                    class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-2.5 text-sm text-neutral-200 focus:outline-none focus:border-red-600">
+            </div>
+
+            <div class="flex items-center gap-3 pt-2">
+                <button onclick="saveKeyAndProceed()" class="flex-1 py-2.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-semibold text-sm rounded-xl transition">
+                    Save & Continue
+                </button>
+                <button onclick="removeKey()" class="px-4 py-2.5 bg-red-950/40 hover:bg-red-900/50 text-red-400 font-semibold text-sm rounded-xl border border-red-800/40 transition">
+                    Remove Key
                 </button>
             </div>
-        </header>
+        </div>
+    </div>
 
-        <!-- VIEW 1: Arena View -->
-        <section id="view-arena" class="flex-1 flex flex-col p-6 gap-4 overflow-hidden">
-            
-            <!-- Topic Controls -->
-            <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-4 shadow-xl grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div class="md:col-span-2">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Debate Topic</label>
-                    <input type="text" id="topic" value="Artificial Intelligence will do more good than harm." 
-                        class="w-full bg-slate-950/80 border border-slate-700/60 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">User Stance</label>
-                    <select id="userStance" class="w-full bg-slate-950/80 border border-slate-700/60 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition cursor-pointer">
-                        <option value="FOR (Pro)">FOR (Pro)</option>
-                        <option value="AGAINST (Con)">AGAINST (Con)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Arena Stream Container -->
-            <div class="flex-1 bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-4 shadow-2xl flex flex-col overflow-hidden">
-                <div id="chat-box" class="flex-1 overflow-y-auto space-y-4 pr-2">
-                    <div class="text-center py-12 text-slate-500 text-sm italic">
-                        Initialize debate matrix by entering your argument below.
-                    </div>
-                </div>
-
-                <!-- Input Field -->
-                <div class="relative flex items-center gap-2 pt-3 border-t border-slate-800/80">
-                    <input type="text" id="userInput" placeholder="State your counter-argument..." 
-                        onkeydown="if(event.key==='Enter') sendArgument()"
-                        class="w-full bg-slate-950/90 border border-slate-700/60 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition pr-24">
-                    
-                    <button id="sendBtn" onclick="sendArgument()" 
-                        class="absolute right-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium text-sm rounded-lg shadow-lg shadow-blue-500/20 transition active:scale-95 disabled:opacity-50">
-                        Send
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 2: Match Analytics View -->
-        <section id="view-analytics" class="hidden flex-1 p-6 overflow-y-auto space-y-4">
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3">Turn Counter & Statistics</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-                        <span class="text-xs text-slate-400">Total Arguments</span>
-                        <p class="text-2xl font-bold text-blue-400 mt-1" id="stat-turns">0</p>
-                    </div>
-                    <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-                        <span class="text-xs text-slate-400">User Words Submitted</span>
-                        <p class="text-2xl font-bold text-indigo-400 mt-1" id="stat-words">0</p>
-                    </div>
-                    <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-                        <span class="text-xs text-slate-400">Session Status</span>
-                        <p class="text-2xl font-bold text-emerald-400 mt-1">Active</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 3: OS Settings View -->
-        <section id="view-settings" class="hidden flex-1 p-6 overflow-y-auto">
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 max-w-xl space-y-4">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Credentials Configuration</h3>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Gemini API Key</label>
-                    <input type="password" id="apiKey" placeholder="AIzaSy..." 
-                        class="w-full bg-slate-950 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
-                    <p class="text-[11px] text-slate-500 mt-1">Key stored safely in memory per session.</p>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- App Logic Script -->
     <script>
-        let chatHistory = [];
-        let totalWords = 0;
-
-        function switchView(viewName) {
-            ['arena', 'analytics', 'settings'].forEach(v => {
-                document.getElementById(`view-${v}`).classList.add('hidden');
-                document.getElementById(`nav-${v}`).className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition";
-            });
-
-            document.getElementById(`view-${viewName}`).classList.remove('hidden');
-            document.getElementById(`nav-${viewName}`).className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition bg-blue-600/20 text-blue-400 border border-blue-500/30";
-            
-            const titles = { arena: "⚔️ Debate Arena", analytics: "📊 Match Analytics", settings: "⚙️ OS Settings" };
-            document.getElementById("view-title").innerHTML = titles[viewName];
+        function openModal() {
+            const savedKey = localStorage.getItem("debateOS_key") || "";
+            document.getElementById("modalApiKey").value = savedKey;
+            document.getElementById("api-modal").classList.remove("hidden");
         }
 
-        async function sendArgument() {
-            const apiKey = document.getElementById("apiKey").value.trim();
-            const topic = document.getElementById("topic").value.trim();
-            const userStance = document.getElementById("userStance").value;
-            const inputField = document.getElementById("userInput");
-            const userText = inputField.value.trim();
-
-            if (!apiKey) {
-                alert("Please add your Gemini API Key under OS Settings or Sidebar.");
-                switchView('settings');
-                return;
-            }
-            if (!userText) return;
-
-            const chatBox = document.getElementById("chat-box");
-            if (chatHistory.length === 0) chatBox.innerHTML = "";
-
-            appendMessage("user", userText);
-            chatHistory.push({ role: "user", content: userText });
-            
-            totalWords += userText.split(/\s+/).length;
-            updateStats();
-            
-            inputField.value = "";
-            toggleLoading(true);
-            const loadingIndicator = appendThinkingIndicator();
-
-            try {
-                const response = await fetch("/api/debate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        api_key: apiKey,
-                        topic: topic,
-                        user_stance: userStance,
-                        history: chatHistory
-                    })
-                });
-
-                const data = await response.json();
-                loadingIndicator.remove();
-
-                if (data.error) {
-                    alert("Error: " + data.error);
-                } else {
-                    appendMessage("ai", data.reply);
-                    chatHistory.push({ role: "assistant", content: data.reply });
-                    updateStats();
-                }
-            } catch (err) {
-                loadingIndicator.remove();
-                alert("Failed to connect to backend: " + err);
-            } finally {
-                toggleLoading(false);
-            }
+        function closeModal() {
+            document.getElementById("api-modal").classList.add("hidden");
         }
 
-        function appendMessage(sender, text) {
-            const chatBox = document.getElementById("chat-box");
-            const wrapper = document.createElement("div");
-            wrapper.className = `flex flex-col ${sender === 'user' ? 'items-end' : 'items-start'} space-y-1`;
+        function saveKeyAndProceed() {
+            const key = document.getElementById("modalApiKey").value.trim();
+            if (!key) return alert("Please enter a valid API Key.");
+            localStorage.setItem("debateOS_key", key);
+            window.location.href = "/debate";
+        }
 
-            const badge = document.createElement("span");
-            badge.className = "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-slate-400";
-            badge.innerText = sender === "user" ? "You" : "DebateOS Agent";
+        function removeKey() {
+            localStorage.removeItem("debateOS_key");
+            document.getElementById("modalApiKey").value = "";
+            alert("API Key removed from browser storage.");
+        }
 
-            const bubble = document.createElement("div");
-            if (sender === "user") {
-                bubble.className = "max-w-[80%] bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none shadow-md text-sm leading-relaxed";
-                bubble.textContent = text;
+        function toggleLandingReason(btn) {
+            const content = btn.nextElementSibling;
+            const chevron = btn.querySelector('.chevron');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
             } else {
-                bubble.className = "max-w-[80%] bg-slate-900 border border-slate-800 text-slate-200 p-3.5 rounded-2xl rounded-tl-none shadow-md text-sm leading-relaxed prose prose-invert max-w-none";
-                bubble.innerHTML = marked.parse(text);
+                content.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
             }
-
-            wrapper.appendChild(badge);
-            wrapper.appendChild(bubble);
-            chatBox.appendChild(wrapper);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function appendThinkingIndicator() {
-            const chatBox = document.getElementById("chat-box");
-            const wrapper = document.createElement("div");
-            wrapper.className = "flex items-center gap-2 text-slate-400 text-xs italic py-2 px-1";
-            wrapper.innerHTML = `
-                <div class="flex gap-1">
-                    <span class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></span>
-                    <span class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-                </div>
-                <span>DebateOS is constructing rebuttal...</span>
-            `;
-            chatBox.appendChild(wrapper);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return wrapper;
-        }
-
-        function updateStats() {
-            document.getElementById("stat-turns").innerText = chatHistory.length;
-            document.getElementById("stat-words").innerText = totalWords;
-        }
-
-        function toggleLoading(isLoading) {
-            document.getElementById("userInput").disabled = isLoading;
-            document.getElementById("sendBtn").disabled = isLoading;
-        }
-
-        function resetDebate() {
-            chatHistory = [];
-            totalWords = 0;
-            document.getElementById("chat-box").innerHTML = `
-                <div class="text-center py-12 text-slate-500 text-sm italic">
-                    Initialize debate matrix by entering your argument below.
-                </div>
-            `;
-            updateStats();
         }
     </script>
 </body>
