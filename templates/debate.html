@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DebateOS — ARIA Arena Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        #chat-box::-webkit-scrollbar { width: 5px; }
+        #chat-box::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.6); }
+        #chat-box::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-black text-neutral-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Workspace Header -->
+    <header class="h-14 border-b border-red-950/60 bg-neutral-950/80 backdrop-blur-xl px-6 flex items-center justify-between z-10">
+        <div class="flex items-center gap-4">
+            <a href="/" class="text-neutral-400 hover:text-white text-xs font-semibold flex items-center gap-1">← Exit</a>
+            <span class="text-neutral-800">|</span>
+            <span class="font-bold text-xs uppercase tracking-wider text-neutral-300">⚔️ ARIA Arena Workspace</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <button onclick="openSettingsModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 transition">⚙️ Settings</button>
+            <button onclick="resetDebate()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/40 transition">New Debate</button>
+        </div>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+        <!-- SIDEBAR: RECENT DEBATES -->
+        <aside class="w-72 bg-neutral-950 border-r border-red-950/60 p-4 flex flex-col gap-4 overflow-y-auto hidden md:flex">
+            <div class="text-[10px] font-black uppercase tracking-widest text-red-500">Recent Debates</div>
+            <div id="recent-debates-list" class="space-y-2 flex-1">
+                <!-- Dynamically populated via loadRecentDebates() -->
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col gap-3 overflow-hidden">
+            <!-- DEBATE HUD & ROUND TRACKER -->
+            <div class="bg-neutral-950 border border-red-900/40 rounded-2xl p-4 shadow-xl shadow-red-950/30 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-neutral-800/80 pb-2.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
+                        <span id="hud-round-title" class="font-black text-xs uppercase tracking-wider text-white">● ROUND 01 OF 05: Opening Statement</span>
+                    </div>
+                    <div id="hud-live-badge" class="text-xs font-mono text-red-400 bg-red-950/40 px-2.5 py-1 rounded-lg border border-red-900/30 font-bold">● LIVE</div>
+                </div>
+
+                <div class="bg-black/60 border border-neutral-800/80 rounded-xl p-3 font-mono text-xs text-neutral-300 grid grid-cols-2 sm:grid-cols-5 gap-2" id="round-steps-container">
+                    <div id="step-1" class="flex items-center gap-2 text-red-400 font-bold"><span>●</span> Opening</div>
+                    <div id="step-2" class="flex items-center gap-2 text-neutral-500"><span>○</span> Counter</div>
+                    <div id="step-3" class="flex items-center gap-2 text-neutral-500"><span>○</span> Rebuttal</div>
+                    <div id="step-4" class="flex items-center gap-2 text-neutral-500"><span>○</span> Cross Exam</div>
+                    <div id="step-5" class="flex items-center gap-2 text-neutral-500"><span>○</span> Closing</div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-neutral-900/50 rounded-xl p-2 border border-neutral-800/60">
+                        <div class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">ARIA Score</div>
+                        <div id="ai-score" class="text-xl font-black text-white">50</div>
+                    </div>
+                    <div class="bg-neutral-900/50 rounded-xl p-2 border border-neutral-800/60">
+                        <div class="text-[10px] uppercase font-bold text-red-400 tracking-wider">Your Score</div>
+                        <div id="user-score" class="text-xl font-black text-red-400">50</div>
+                    </div>
+                    <div class="bg-neutral-900/50 rounded-xl p-2 border border-neutral-800/60">
+                        <div class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Debate Time</div>
+                        <div id="debate-timer" class="text-xl font-mono font-bold text-white">00:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic Configurations -->
+            <div class="bg-neutral-950/80 border border-red-900/30 rounded-xl p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="sm:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-red-400 mb-1">Debate Topic</label>
+                    <input type="text" id="topic" value="Artificial Intelligence will do more good than harm." 
+                        class="w-full bg-black border border-neutral-800 rounded-lg px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-red-600">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-red-400 mb-1">Your Stance</label>
+                    <select id="userStance" class="w-full bg-black border border-neutral-800 rounded-lg px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-red-600 cursor-pointer">
+                        <option value="FOR (Pro)">FOR (Pro)</option>
+                        <option value="AGAINST (Con)">AGAINST (Con)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="flex-1 bg-neutral-950/80 border border-red-900/30 rounded-2xl p-4 flex flex-col overflow-hidden shadow-xl shadow-red-950/20">
+                <div id="chat-box" class="flex-1 overflow-y-auto space-y-4 pr-2">
+                    <div class="bg-neutral-900/60 border border-red-900/30 rounded-2xl p-5 space-y-3 max-w-xl">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-red-600"></span>
+                            <span class="font-black text-xs uppercase tracking-wider text-white">ARIA — Adversarial Reasoning Intelligence</span>
+                        </div>
+                        <p class="text-xs text-neutral-300 leading-relaxed italic">
+                            "Welcome to the Structured Arena. We will proceed through 5 formal rounds. Enter your Round 1 Opening Statement whenever you are ready."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center gap-2 pt-3 border-t border-neutral-900">
+                    <input type="text" id="userInput" placeholder="Enter your Round 1 Opening Statement..." 
+                        onkeydown="if(event.key==='Enter') sendArgument()"
+                        class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-red-600 pr-24">
+                    <button id="sendBtn" onclick="sendArgument()" 
+                        class="absolute right-2 px-5 py-2 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-medium text-sm rounded-lg shadow-lg shadow-red-600/30 transition active:scale-95 disabled:opacity-50">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let chatHistory = [];
+        let currentRound = 1;
+        let timerSeconds = 0;
+        let timerInterval = null;
+        let currentDebateId = null;
+
+        const roundNames = { 1: "Opening Statement", 2: "Counter Argument", 3: "Rebuttal", 4: "Cross Examination", 5: "Closing Statement" };
+
+        window.onload = function() {
+            if (!localStorage.getItem("debateOS_key")) {
+                window.location.href = "/";
+            }
+            startTimer();
+            updateRoundUI();
+            loadRecentDebates();
+        };
+
+        async function loadRecentDebates() {
+            try {
+                const res = await fetch("/api/debates");
+                const debates = await res.json();
+                const listEl = document.getElementById("recent-debates-list");
+                listEl.innerHTML = debates.map(d => `
+                    <button onclick="loadDebateTranscript(${d.id})" class="w-full text-left p-2.5 rounded-xl bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-800/80 transition group">
+                        <div class="font-bold text-xs text-white group-hover:text-red-400 truncate">● ${d.topic}</div>
+                        <div class="text-[10px] text-neutral-500 font-mono mt-1">${d.rounds} rounds · ${d.final_score} score</div>
+                    </button>
+                `).join('');
+            } catch(e) { console.error("Could not load history", e); }
+        }
+
+        async function loadDebateTranscript(id) {
+            try {
+                const res = await fetch(`/api/debates/${id}`);
+                const data = await res.json();
+                currentDebateId = id;
+                document.getElementById("topic").value = data.topic;
+                document.getElementById("userStance").value = data.stance;
+                document.getElementById("chat-box").innerHTML = "";
+                
+                data.arguments.forEach(arg => {
+                    appendMessage("user", arg.user_argument);
+                    appendAriaMessage({ reply: arg.ai_response, metrics: { user_score: arg.score, argument_strength: arg.score } });
+                });
+                currentRound = 6;
+                updateRoundUI();
+            } catch(e) { alert("Failed to load transcript."); }
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+                const secs = String(timerSeconds % 60).padStart(2, '0');
+                document.getElementById("debate-timer").innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function updateRoundUI() {
+            if (currentRound <= 5) {
+                document.getElementById("hud-round-title").innerText = `● ROUND 0${currentRound} OF 05: ${roundNames[currentRound]}`;
+                document.getElementById("userInput").placeholder = `Enter your Round ${currentRound} (${roundNames[currentRound]})...`;
+            } else {
+                document.getElementById("hud-round-title").innerText = `✓ DEBATE COMPLETE`;
+                document.getElementById("userInput").placeholder = `Debate concluded. Select 'New Debate' to start fresh.`;
+                document.getElementById("userInput").disabled = true;
+                document.getElementById("sendBtn").disabled = true;
+                if (timerInterval) clearInterval(timerInterval);
+            }
+        }
+
+        async function sendArgument() {
+            const apiKey = localStorage.getItem("debateOS_key");
+            const topic = document.getElementById("topic").value.trim();
+            const userStance = document.getElementById("userStance").value;
+            const inputField = document.getElementById("userInput");
+            const userText = inputField.value.trim();
+
+            if (!userText || currentRound > 5) return;
+
+            appendMessage("user", userText);
+            chatHistory.push({ role: "user", content: `[Round ${currentRound}: ${roundNames[currentRound]}] ${userText}` });
+            inputField.value = "";
+
+            try {
+                const response = await fetch("/api/debate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ api_key: apiKey, topic: topic, user_stance: userStance, history: chatHistory, debate_id: currentDebateId })
+                });
+                const data = await response.json();
+                if (data.debate_id) currentDebateId = data.debate_id;
+
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    appendAriaMessage(data);
+                    chatHistory.push({ role: "assistant", content: data.reply });
+                    if (data.metrics) {
+                        document.getElementById("ai-score").innerText = data.metrics.ai_score ?? 50;
+                        document.getElementById("user-score").innerText = data.metrics.user_score ?? 50;
+                    }
+                    currentRound++;
+                    updateRoundUI();
+                    loadRecentDebates();
+                }
+            } catch (err) { alert("Failed to connect: " + err); }
+        }
+
+        function appendMessage(sender, text) {
+            const chatBox = document.getElementById("chat-box");
+            const wrapper = document.createElement("div");
+            wrapper.className = `flex flex-col ${sender === 'user' ? 'items-end' : 'items-start'} space-y-1`;
+            const bubble = document.createElement("div");
+            bubble.className = "max-w-[80%] bg-red-700 text-white p-3.5 rounded-2xl rounded-tr-none text-sm leading-relaxed";
+            bubble.textContent = text;
+            wrapper.appendChild(bubble);
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendAriaMessage(data) {
+            const chatBox = document.getElementById("chat-box");
+            const wrapper = document.createElement("div");
+            wrapper.className = "flex flex-col items-start space-y-3 max-w-2xl w-full";
+            const card = document.createElement("div");
+            card.className = "bg-neutral-900 border border-red-900/40 rounded-2xl p-5 space-y-3 w-full text-sm text-neutral-200";
+            card.innerHTML = marked.parse(data.reply);
+            wrapper.appendChild(card);
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function resetDebate() {
+            chatHistory = [];
+            currentRound = 1;
+            currentDebateId = null;
+            timerSeconds = 0;
+            startTimer();
+            updateRoundUI();
+            document.getElementById("userInput").disabled = false;
+            document.getElementById("sendBtn").disabled = false;
+            document.getElementById("chat-box").innerHTML = `<div class="bg-neutral-900/60 p-5 rounded-2xl text-xs text-neutral-300">New debate session initialized. Enter your opening statement.</div>`;
+        }
+
+        function openSettingsModal() {
+            if(confirm("Click OK to clear your API key.")) { localStorage.removeItem("debateOS_key"); window.location.href = "/"; }
+        }
+    </script>
+</body>
+</html>
