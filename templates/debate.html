@@ -205,7 +205,14 @@
                 const response = await fetch("/api/debate", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ api_key: apiKey, topic: topic, user_stance: userStance, history: chatHistory, debate_id: currentDebateId })
+                   body: JSON.stringify({
+    api_key: apiKey,
+    topic: topic,
+    user_stance: userStance,
+    history: chatHistory,
+    debate_id: currentDebateId,
+    round_number: currentRound
+})
                 });
                 const data = await response.json();
                 if (data.debate_id) currentDebateId = data.debate_id;
