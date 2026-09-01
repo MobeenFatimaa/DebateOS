@@ -1,277 +1,3992 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DebateOS — ARIA Arena Workspace</title>
+
+    <title>DebateOS — ARIA Arena</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
-        #chat-box::-webkit-scrollbar { width: 5px; }
-        #chat-box::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.6); }
-        #chat-box::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 9999px; }
+        /* =====================================================
+           SCROLLBARS
+        ===================================================== */
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #dc2626 #09090b;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #dc2626;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ef4444;
+        }
+
+
+        /* =====================================================
+           ANIMATIONS
+        ===================================================== */
+
+        @keyframes pulseRed {
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+        }
+
+        .pulse-red {
+            animation: pulseRed 1.5s infinite;
+        }
+
+
+        @keyframes thinking {
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .thinking-dot {
+            animation: thinking 1.2s infinite;
+        }
+
+        .thinking-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .thinking-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(300%);
+            }
+        }
+
+        .scanline {
+            animation: scanline 3s linear infinite;
+        }
+
+
+        /* =====================================================
+           CHAT TEXT
+        ===================================================== */
+
+        .aria-text p {
+            margin-bottom: 0.65rem;
+        }
+
+        .aria-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .aria-text strong {
+            color: white;
+        }
+
+
+        /* =====================================================
+           SCORE BAR
+        ===================================================== */
+
+        .score-bar {
+            transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+
+        /* =====================================================
+           MOBILE BOTTOM NAV
+        ===================================================== */
+
+        @media (max-width: 767px) {
+
+            .mobile-bottom-nav {
+                display: flex;
+            }
+
+            .workspace-main {
+                padding-bottom: 75px;
+            }
+        }
+
+        @media (min-width: 768px) {
+
+            .mobile-bottom-nav {
+                display: none;
+            }
+        }
     </style>
 </head>
-<body class="bg-black text-neutral-100 min-h-screen flex flex-col font-sans">
 
-    <!-- Workspace Header -->
-    <header class="h-14 border-b border-red-950/60 bg-neutral-950/80 backdrop-blur-xl px-6 flex items-center justify-between z-10">
-        <div class="flex items-center gap-4">
-            <a href="/" class="text-neutral-400 hover:text-white text-xs font-semibold flex items-center gap-1">← Exit</a>
+
+<body class="bg-black text-neutral-100 min-h-screen font-sans overflow-hidden">
+
+
+    <!-- =====================================================
+         TOP HEADER
+    ====================================================== -->
+
+    <header
+        class="h-14 shrink-0 border-b border-red-950/60 bg-neutral-950/90 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between relative z-40">
+
+        <!-- Left -->
+
+        <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+
+            <a href="/"
+               class="text-neutral-500 hover:text-white text-xs font-semibold transition flex items-center gap-1 shrink-0">
+                <span>←</span>
+                <span class="hidden sm:inline">Exit</span>
+            </a>
+
             <span class="text-neutral-800">|</span>
-            <span class="font-bold text-xs uppercase tracking-wider text-neutral-300">⚔️ ARIA Arena Workspace</span>
+
+            <div class="flex items-center gap-2 min-w-0">
+
+                <div
+                    class="w-7 h-7 rounded-lg bg-gradient-to-tr from-red-700 to-rose-600 flex items-center justify-center font-black text-white shadow-lg shadow-red-600/20">
+                    A
+                </div>
+
+                <div class="min-w-0">
+
+                    <div class="font-black text-xs uppercase tracking-wider text-white truncate">
+                        ARIA Arena
+                    </div>
+
+                    <div class="hidden sm:block text-[9px] text-neutral-600 font-mono">
+                        ADVERSARIAL REASONING INTELLIGENCE
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-        <div class="flex items-center gap-3">
-            <button onclick="openSettingsModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 transition">⚙️ Settings</button>
-            <button onclick="resetDebate()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/40 transition">New Debate</button>
+
+
+        <!-- Right -->
+
+        <div class="flex items-center gap-2">
+
+            <div
+                id="header-status"
+                class="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-lg border border-red-900/40 bg-red-950/30 text-red-400 text-[10px] font-mono font-bold">
+
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 pulse-red"></span>
+
+                <span>LIVE</span>
+
+            </div>
+
+
+            <button
+                onclick="openSettingsModal()"
+                class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 transition">
+
+                ⚙ Settings
+
+            </button>
+
+
+            <button
+                onclick="resetDebate()"
+                class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-800/40 transition">
+
+                <span class="hidden sm:inline">New Debate</span>
+                <span class="sm:hidden">+</span>
+
+            </button>
+
         </div>
+
     </header>
 
-    <div class="flex-1 flex overflow-hidden">
-        <!-- SIDEBAR: RECENT DEBATES -->
-        <aside class="w-72 bg-neutral-950 border-r border-red-950/60 p-4 flex flex-col gap-4 overflow-y-auto hidden md:flex">
-            <div class="text-[10px] font-black uppercase tracking-widest text-red-500">Recent Debates</div>
-            <div id="recent-debates-list" class="space-y-2 flex-1">
-                <!-- Dynamically populated via loadRecentDebates() -->
+
+
+    <!-- =====================================================
+         MAIN WORKSPACE
+    ====================================================== -->
+
+    <div class="flex h-[calc(100vh-56px)]">
+
+
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
+        <aside
+            class="hidden md:flex w-64 lg:w-72 shrink-0 bg-neutral-950 border-r border-red-950/60 flex-col overflow-hidden">
+
+            <!-- Sidebar Header -->
+
+            <div class="p-4 border-b border-neutral-900">
+
+                <div class="flex items-center justify-between">
+
+                    <div
+                        class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">
+
+                        Debate Structure
+
+                    </div>
+
+                    <div
+                        id="sidebar-round-count"
+                        class="text-[9px] font-mono text-neutral-600">
+
+                        01 / 05
+
+                    </div>
+
+                </div>
+
             </div>
+
+
+            <!-- Round Navigation -->
+
+            <div class="p-3 space-y-1 border-b border-neutral-900">
+
+                <button
+                    id="round-nav-1"
+                    onclick="focusRound(1)"
+                    class="round-nav active-round">
+
+                    <span class="round-number">01</span>
+
+                    <span class="flex-1 text-left">
+                        <span class="block">Opening</span>
+                        <span class="round-description">
+                            Present your thesis
+                        </span>
+                    </span>
+
+                    <span class="round-icon">●</span>
+
+                </button>
+
+
+                <button
+                    id="round-nav-2"
+                    onclick="focusRound(2)"
+                    class="round-nav">
+
+                    <span class="round-number">02</span>
+
+                    <span class="flex-1 text-left">
+                        <span class="block">Counter</span>
+                        <span class="round-description">
+                            Defend against ARIA
+                        </span>
+                    </span>
+
+                    <span class="round-icon">○</span>
+
+                </button>
+
+
+                <button
+                    id="round-nav-3"
+                    onclick="focusRound(3)"
+                    class="round-nav">
+
+                    <span class="round-number">03</span>
+
+                    <span class="flex-1 text-left">
+                        <span class="block">Rebuttal</span>
+                        <span class="round-description">
+                            Attack the counter
+                        </span>
+                    </span>
+
+                    <span class="round-icon">○</span>
+
+                </button>
+
+
+                <button
+                    id="round-nav-4"
+                    onclick="focusRound(4)"
+                    class="round-nav">
+
+                    <span class="round-number">04</span>
+
+                    <span class="flex-1 text-left">
+                        <span class="block">Cross Exam</span>
+                        <span class="round-description">
+                            Survive questioning
+                        </span>
+                    </span>
+
+                    <span class="round-icon">○</span>
+
+                </button>
+
+
+                <button
+                    id="round-nav-5"
+                    onclick="focusRound(5)"
+                    class="round-nav">
+
+                    <span class="round-number">05</span>
+
+                    <span class="flex-1 text-left">
+                        <span class="block">Closing</span>
+                        <span class="round-description">
+                            Deliver your conclusion
+                        </span>
+                    </span>
+
+                    <span class="round-icon">○</span>
+
+                </button>
+
+            </div>
+
+
+            <!-- Topic -->
+
+            <div class="p-4 border-b border-neutral-900">
+
+                <div
+                    class="text-[9px] uppercase tracking-widest text-neutral-600 font-black mb-2">
+
+                    Current Topic
+
+                </div>
+
+                <div
+                    id="sidebar-topic"
+                    class="text-xs text-neutral-300 leading-relaxed">
+
+                    Artificial Intelligence will do more good than harm.
+
+                </div>
+
+            </div>
+
+
+            <!-- Recent Debates -->
+
+            <div class="p-4 pb-2">
+
+                <div
+                    class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">
+
+                    Recent Debates
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="recent-debates-list"
+                class="px-3 pb-4 space-y-2 overflow-y-auto flex-1">
+
+                <div class="text-[10px] text-neutral-600 text-center py-4">
+                    Loading history...
+                </div>
+
+            </div>
+
+
+            <!-- Sidebar Footer -->
+
+            <div class="p-3 border-t border-neutral-900">
+
+                <div
+                    class="bg-black border border-neutral-900 rounded-xl p-3">
+
+                    <div class="flex items-center gap-2 mb-2">
+
+                        <span class="w-2 h-2 rounded-full bg-red-600"></span>
+
+                        <span class="text-[9px] font-bold text-neutral-500 uppercase tracking-wider">
+                            ARIA Engine
+                        </span>
+
+                    </div>
+
+                    <div class="text-[10px] font-mono text-neutral-700">
+                        GEMINI 2.5 FLASH
+                    </div>
+
+                </div>
+
+            </div>
+
         </aside>
 
-        <!-- Main Workspace -->
-        <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col gap-3 overflow-hidden">
-            <!-- DEBATE HUD & ROUND TRACKER -->
-            <div class="bg-neutral-950 border border-red-900/40 rounded-2xl p-4 shadow-xl shadow-red-950/30 flex flex-col gap-3">
-                <div class="flex items-center justify-between border-b border-neutral-800/80 pb-2.5">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
-                        <span id="hud-round-title" class="font-black text-xs uppercase tracking-wider text-white">● ROUND 01 OF 05: Opening Statement</span>
-                    </div>
-                    <div id="hud-live-badge" class="text-xs font-mono text-red-400 bg-red-950/40 px-2.5 py-1 rounded-lg border border-red-900/30 font-bold">● LIVE</div>
-                </div>
 
-                <div class="bg-black/60 border border-neutral-800/80 rounded-xl p-3 font-mono text-xs text-neutral-300 grid grid-cols-2 sm:grid-cols-5 gap-2" id="round-steps-container">
-                    <div id="step-1" class="flex items-center gap-2 text-red-400 font-bold"><span>●</span> Opening</div>
-                    <div id="step-2" class="flex items-center gap-2 text-neutral-500"><span>○</span> Counter</div>
-                    <div id="step-3" class="flex items-center gap-2 text-neutral-500"><span>○</span> Rebuttal</div>
-                    <div id="step-4" class="flex items-center gap-2 text-neutral-500"><span>○</span> Cross Exam</div>
-                    <div id="step-5" class="flex items-center gap-2 text-neutral-500"><span>○</span> Closing</div>
-                </div>
 
-                <div class="grid grid-cols-3 gap-4 text-center">
-                    <div class="bg-neutral-900/50 rounded-xl p-2 border border-neutral-800/60">
-                        <div class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">ARIA Score</div>
-                        <div id="ai-score" class="text-xl font-black text-white">50</div>
-                    </div>
-                    <div class="bg-neutral-900/50 rounded-xl p-2 border border-neutral-800/60">
-                        <div class="text-[10px] uppercase font-bold text-red-400 tracking-wider">Your Score</div>
-                        <div id="user-score" class="text-xl font-black text-red-400">50</div>
-                    </div>
-                    <div class="bg-neutral-900/50 rounded-xl p-2 border border-neutral-800/60">
-                        <div class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Debate Time</div>
-                        <div id="debate-timer" class="text-xl font-mono font-bold text-white">00:00</div>
-                    </div>
-                </div>
-            </div>
+        <!-- =================================================
+             CENTER WORKSPACE
+        ================================================== -->
 
-            <!-- Topic Configurations -->
-            <div class="bg-neutral-950/80 border border-red-900/30 rounded-xl p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="sm:col-span-2">
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-red-400 mb-1">Debate Topic</label>
-                    <input type="text" id="topic" value="Artificial Intelligence will do more good than harm." 
-                        class="w-full bg-black border border-neutral-800 rounded-lg px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-red-600">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-red-400 mb-1">Your Stance</label>
-                    <select id="userStance" class="w-full bg-black border border-neutral-800 rounded-lg px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-red-600 cursor-pointer">
-                        <option value="FOR (Pro)">FOR (Pro)</option>
-                        <option value="AGAINST (Con)">AGAINST (Con)</option>
-                    </select>
-                </div>
-            </div>
+        <main
+            class="workspace-main flex-1 min-w-0 flex flex-col overflow-hidden bg-[radial-gradient(ellipse_at_top,rgba(127,29,29,0.15),transparent_50%)]">
 
-            <!-- Chat Container -->
-            <div class="flex-1 bg-neutral-950/80 border border-red-900/30 rounded-2xl p-4 flex flex-col overflow-hidden shadow-xl shadow-red-950/20">
-                <div id="chat-box" class="flex-1 overflow-y-auto space-y-4 pr-2">
-                    <div class="bg-neutral-900/60 border border-red-900/30 rounded-2xl p-5 space-y-3 max-w-xl">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-red-600"></span>
-                            <span class="font-black text-xs uppercase tracking-wider text-white">ARIA — Adversarial Reasoning Intelligence</span>
+
+            <!-- =================================================
+                 TOP HUD
+            ================================================== -->
+
+            <section class="shrink-0 p-3 sm:p-4 pb-2">
+
+                <div
+                    class="max-w-5xl mx-auto bg-neutral-950/90 border border-red-900/30 rounded-2xl shadow-xl shadow-red-950/10 overflow-hidden">
+
+
+                    <!-- HUD HEADER -->
+
+                    <div
+                        class="px-4 py-3 border-b border-neutral-900 flex items-center justify-between gap-3">
+
+                        <div class="flex items-center gap-2 min-w-0">
+
+                            <span
+                                class="w-2.5 h-2.5 shrink-0 rounded-full bg-red-600 pulse-red">
+                            </span>
+
+                            <div class="min-w-0">
+
+                                <div
+                                    id="hud-round-title"
+                                    class="font-black text-xs uppercase tracking-wider text-white truncate">
+
+                                    ROUND 01 OF 05: OPENING STATEMENT
+
+                                </div>
+
+                                <div
+                                    id="hud-round-subtitle"
+                                    class="text-[9px] text-neutral-600 font-mono mt-0.5">
+
+                                    Establish your position clearly.
+
+                                </div>
+
+                            </div>
+
                         </div>
-                        <p class="text-xs text-neutral-300 leading-relaxed italic">
-                            "Welcome to the Structured Arena. We will proceed through 5 formal rounds. Enter your Round 1 Opening Statement whenever you are ready."
-                        </p>
+
+
+                        <div
+                            id="hud-live-badge"
+                            class="shrink-0 text-[9px] font-mono text-red-400 bg-red-950/40 px-2.5 py-1 rounded-lg border border-red-900/30 font-bold">
+
+                            ● LIVE
+
+                        </div>
+
                     </div>
+
+
+
+                    <!-- PROGRESS -->
+
+                    <div class="px-4 pt-3">
+
+                        <div
+                            class="h-1 bg-neutral-900 rounded-full overflow-hidden">
+
+                            <div
+                                id="round-progress"
+                                class="h-full bg-gradient-to-r from-red-700 to-rose-500 rounded-full transition-all duration-700"
+                                style="width:20%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ROUND STEPS -->
+
+                    <div
+                        class="px-4 py-3 grid grid-cols-5 gap-1 sm:gap-2">
+
+                        <div id="hud-step-1" class="hud-step active">
+                            <span>01</span>
+                            <span class="hidden sm:inline">Opening</span>
+                        </div>
+
+                        <div id="hud-step-2" class="hud-step">
+                            <span>02</span>
+                            <span class="hidden sm:inline">Counter</span>
+                        </div>
+
+                        <div id="hud-step-3" class="hud-step">
+                            <span>03</span>
+                            <span class="hidden sm:inline">Rebuttal</span>
+                        </div>
+
+                        <div id="hud-step-4" class="hud-step">
+                            <span>04</span>
+                            <span class="hidden sm:inline">Cross Exam</span>
+                        </div>
+
+                        <div id="hud-step-5" class="hud-step">
+                            <span>05</span>
+                            <span class="hidden sm:inline">Closing</span>
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- SCORE HUD -->
+
+                    <div
+                        class="px-3 pb-3 grid grid-cols-3 gap-2">
+
+                        <div class="score-card">
+
+                            <div class="score-label">
+                                ARIA SCORE
+                            </div>
+
+                            <div
+                                id="ai-score"
+                                class="score-value text-white">
+
+                                50
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="score-card score-card-user">
+
+                            <div class="score-label text-red-400">
+                                YOUR SCORE
+                            </div>
+
+                            <div
+                                id="user-score"
+                                class="score-value text-red-400">
+
+                                50
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="score-card">
+
+                            <div class="score-label">
+                                DEBATE TIME
+                            </div>
+
+                            <div
+                                id="debate-timer"
+                                class="score-value font-mono">
+
+                                00:00
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="relative flex items-center gap-2 pt-3 border-t border-neutral-900">
-                    <input type="text" id="userInput" placeholder="Enter your Round 1 Opening Statement..." 
-                        onkeydown="if(event.key==='Enter') sendArgument()"
-                        class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-red-600 pr-24">
-                    <button id="sendBtn" onclick="sendArgument()" 
-                        class="absolute right-2 px-5 py-2 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-medium text-sm rounded-lg shadow-lg shadow-red-600/30 transition active:scale-95 disabled:opacity-50">
-                        Send
-                    </button>
+            </section>
+
+
+
+            <!-- =================================================
+                 TOPIC CONFIGURATION
+            ================================================== -->
+
+            <section class="shrink-0 px-3 sm:px-4 pb-3">
+
+                <div
+                    class="max-w-5xl mx-auto bg-neutral-950/80 border border-neutral-900 rounded-xl p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            class="block text-[9px] font-black uppercase tracking-widest text-red-400 mb-1.5">
+
+                            Debate Topic
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="topic"
+                            value="Artificial Intelligence will do more good than harm."
+                            oninput="syncTopic()"
+                            class="w-full bg-black border border-neutral-800 rounded-lg px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-red-600 transition">
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            class="block text-[9px] font-black uppercase tracking-widest text-red-400 mb-1.5">
+
+                            Your Stance
+
+                        </label>
+
+                        <select
+                            id="userStance"
+                            class="w-full bg-black border border-neutral-800 rounded-lg px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-red-600 cursor-pointer">
+
+                            <option value="FOR (Pro)">
+                                FOR (Pro)
+                            </option>
+
+                            <option value="AGAINST (Con)">
+                                AGAINST (Con)
+                            </option>
+
+                        </select>
+
+                    </div>
+
                 </div>
-            </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CHAT AREA
+            ================================================== -->
+
+            <section class="flex-1 min-h-0 px-3 sm:px-4 pb-3">
+
+                <div
+                    class="max-w-5xl mx-auto h-full bg-neutral-950/80 border border-red-900/20 rounded-2xl shadow-xl shadow-red-950/10 flex flex-col overflow-hidden">
+
+
+                    <!-- Chat Header -->
+
+                    <div
+                        class="shrink-0 px-4 py-3 border-b border-neutral-900 flex items-center justify-between">
+
+                        <div class="flex items-center gap-2">
+
+                            <div
+                                class="w-7 h-7 rounded-lg bg-red-950/50 border border-red-900/40 flex items-center justify-center text-red-500 text-xs">
+
+                                A
+
+                            </div>
+
+                            <div>
+
+                                <div
+                                    class="text-xs font-black text-white">
+
+                                    ARIA
+
+                                </div>
+
+                                <div
+                                    class="text-[9px] font-mono text-neutral-600">
+
+                                    ADVERSARIAL INTELLIGENCE
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="text-[9px] font-mono text-neutral-700">
+
+                            SESSION:
+                            <span id="session-id">NEW</span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Chat -->
+
+                    <div
+                        id="chat-box"
+                        class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+
+
+                        <!-- Initial ARIA Message -->
+
+                        <div
+                            class="animate-slide-up flex items-start gap-3 max-w-3xl">
+
+                            <div
+                                class="shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-red-700 to-rose-600 flex items-center justify-center text-xs font-black shadow-lg shadow-red-900/30">
+
+                                A
+
+                            </div>
+
+
+                            <div
+                                class="bg-neutral-900/80 border border-red-900/30 rounded-2xl rounded-tl-sm p-4">
+
+                                <div
+                                    class="flex items-center gap-2 mb-2">
+
+                                    <span
+                                        class="text-[9px] font-black uppercase tracking-widest text-red-500">
+
+                                        ARIA
+
+                                    </span>
+
+                                    <span class="text-neutral-700">
+                                        •
+                                    </span>
+
+                                    <span
+                                        class="text-[9px] font-mono text-neutral-600">
+
+                                        SYSTEM READY
+
+                                    </span>
+
+                                </div>
+
+                                <p
+                                    class="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+
+                                    Welcome to the Structured Arena.
+
+                                    <br><br>
+
+                                    You will face five rounds of adversarial reasoning.
+
+                                    Present your opening position clearly. I will challenge
+                                    your assumptions, inspect your evidence, and test the
+                                    logical structure of your argument.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- Thinking Indicator -->
+
+                    <div
+                        id="thinking-indicator"
+                        class="hidden shrink-0 px-4 pb-3">
+
+                        <div
+                            class="flex items-center gap-3">
+
+                            <div
+                                class="w-7 h-7 rounded-lg bg-red-950/50 border border-red-900/40 flex items-center justify-center text-red-500 text-xs">
+
+                                A
+
+                            </div>
+
+                            <div
+                                class="bg-neutral-900 border border-red-900/30 rounded-xl px-4 py-2.5">
+
+                                <div
+                                    class="flex items-center gap-1.5">
+
+                                    <span
+                                        class="text-[9px] font-mono text-neutral-500 mr-1">
+
+                                        ARIA THINKING
+
+                                    </span>
+
+                                    <span
+                                        class="thinking-dot w-1.5 h-1.5 rounded-full bg-red-500">
+                                    </span>
+
+                                    <span
+                                        class="thinking-dot w-1.5 h-1.5 rounded-full bg-red-500">
+                                    </span>
+
+                                    <span
+                                        class="thinking-dot w-1.5 h-1.5 rounded-full bg-red-500">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Input -->
+
+                    <div
+                        class="shrink-0 p-3 border-t border-neutral-900">
+
+                        <div class="relative flex items-end gap-2">
+
+                            <textarea
+                                id="userInput"
+                                rows="1"
+                                placeholder="Enter your Round 1 opening statement..."
+                                onkeydown="handleInputKey(event)"
+                                oninput="autoResize(this)"
+                                class="flex-1 resize-none bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-red-600 transition pr-16 max-h-32 overflow-y-auto"></textarea>
+
+
+                            <button
+                                id="sendBtn"
+                                onclick="sendArgument()"
+                                class="absolute right-2 bottom-2 w-10 h-10 flex items-center justify-center bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white rounded-lg shadow-lg shadow-red-600/20 transition active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
+
+                                ↑
+
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="flex items-center justify-between mt-2 px-1">
+
+                            <span
+                                class="text-[9px] text-neutral-700 font-mono">
+
+                                ENTER TO SEND · SHIFT + ENTER FOR NEW LINE
+
+                            </span>
+
+                            <span
+                                id="character-count"
+                                class="text-[9px] text-neutral-700 font-mono">
+
+                                0
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
         </main>
+
+
+
+        <!-- =================================================
+             RIGHT ANALYSIS PANEL
+        ================================================== -->
+
+        <aside
+            id="analysis-panel"
+            class="hidden lg:flex w-80 xl:w-96 shrink-0 bg-neutral-950 border-l border-red-950/60 flex-col overflow-hidden">
+
+
+            <!-- Panel Header -->
+
+            <div
+                class="shrink-0 px-4 py-4 border-b border-neutral-900">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <div
+                            class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">
+
+                            Reasoning Analysis
+
+                        </div>
+
+                        <div
+                            class="text-[9px] text-neutral-600 font-mono mt-1">
+
+                            LIVE ARGUMENT DIAGNOSTICS
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="w-7 h-7 rounded-lg bg-red-950/40 border border-red-900/30 flex items-center justify-center text-red-500">
+
+                        ◈
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Analysis Scroll -->
+
+            <div
+                id="analysis-content"
+                class="flex-1 overflow-y-auto p-4 space-y-4">
+
+
+                <!-- Empty State -->
+
+                <div
+                    id="analysis-empty"
+                    class="h-full flex flex-col items-center justify-center text-center px-5">
+
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-red-950/30 border border-red-900/30 flex items-center justify-center text-red-600 text-xl mb-4">
+
+                        ◈
+
+                    </div>
+
+                    <div
+                        class="text-xs font-bold text-neutral-400">
+
+                        Awaiting Argument
+
+                    </div>
+
+                    <p
+                        class="text-[10px] text-neutral-700 leading-relaxed mt-2">
+
+                        Submit your argument and ARIA will
+                        analyze its structure, evidence,
+                        assumptions, and logical consistency.
+
+                    </p>
+
+                </div>
+
+
+                <!-- Actual Analysis -->
+
+                <div
+                    id="analysis-data"
+                    class="hidden space-y-4">
+
+
+                    <!-- Overall -->
+
+                    <div
+                        class="bg-black border border-red-900/30 rounded-xl p-4">
+
+                        <div class="flex items-center justify-between mb-3">
+
+                            <div
+                                class="text-[9px] uppercase tracking-widest font-black text-neutral-500">
+
+                                Argument Performance
+
+                            </div>
+
+                            <span
+                                id="performance-level"
+                                class="text-[9px] font-mono font-bold text-red-400">
+
+                                DEVELOPING
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="flex items-end gap-2 mb-3">
+
+                            <span
+                                id="analysis-overall-score"
+                                class="text-4xl font-black text-white">
+
+                                50
+
+                            </span>
+
+                            <span
+                                class="text-[10px] text-neutral-600 mb-1">
+
+                                / 100
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
+
+                            <div
+                                id="overall-score-bar"
+                                class="score-bar h-full bg-gradient-to-r from-red-700 to-rose-500 rounded-full"
+                                style="width:50%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Metrics -->
+
+                    <div
+                        class="bg-black border border-neutral-900 rounded-xl p-4">
+
+                        <div
+                            class="text-[9px] uppercase tracking-widest font-black text-neutral-500 mb-4">
+
+                            Performance Metrics
+
+                        </div>
+
+
+                        <div class="space-y-4">
+
+                            <div>
+
+                                <div
+                                    class="flex justify-between text-[10px] mb-1.5">
+
+                                    <span class="text-neutral-500">
+                                        Argument Strength
+                                    </span>
+
+                                    <span
+                                        id="metric-strength"
+                                        class="text-neutral-300 font-mono">
+                                        50
+                                    </span>
+
+                                </div>
+
+                                <div class="metric-track">
+                                    <div
+                                        id="bar-strength"
+                                        class="metric-fill"
+                                        style="width:50%">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                <div
+                                    class="flex justify-between text-[10px] mb-1.5">
+
+                                    <span class="text-neutral-500">
+                                        Evidence Quality
+                                    </span>
+
+                                    <span
+                                        id="metric-evidence"
+                                        class="text-neutral-300 font-mono">
+                                        50
+                                    </span>
+
+                                </div>
+
+                                <div class="metric-track">
+                                    <div
+                                        id="bar-evidence"
+                                        class="metric-fill"
+                                        style="width:50%">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                <div
+                                    class="flex justify-between text-[10px] mb-1.5">
+
+                                    <span class="text-neutral-500">
+                                        Logical Consistency
+                                    </span>
+
+                                    <span
+                                        id="metric-logic"
+                                        class="text-neutral-300 font-mono">
+                                        50
+                                    </span>
+
+                                </div>
+
+                                <div class="metric-track">
+                                    <div
+                                        id="bar-logic"
+                                        class="metric-fill"
+                                        style="width:50%">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                <div
+                                    class="flex justify-between text-[10px] mb-1.5">
+
+                                    <span class="text-neutral-500">
+                                        Relevance
+                                    </span>
+
+                                    <span
+                                        id="metric-relevance"
+                                        class="text-neutral-300 font-mono">
+                                        50
+                                    </span>
+
+                                </div>
+
+                                <div class="metric-track">
+                                    <div
+                                        id="bar-relevance"
+                                        class="metric-fill"
+                                        style="width:50%">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                <div
+                                    class="flex justify-between text-[10px] mb-1.5">
+
+                                    <span class="text-neutral-500">
+                                        Persuasiveness
+                                    </span>
+
+                                    <span
+                                        id="metric-persuasiveness"
+                                        class="text-neutral-300 font-mono">
+                                        50
+                                    </span>
+
+                                </div>
+
+                                <div class="metric-track">
+                                    <div
+                                        id="bar-persuasiveness"
+                                        class="metric-fill"
+                                        style="width:50%">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Core Claim -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title">
+                            <span class="analysis-icon">01</span>
+                            Core Claim
+                        </div>
+
+                        <p
+                            id="analysis-core-claim"
+                            class="analysis-text">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Strongest Point -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title">
+                            <span class="analysis-icon">+</span>
+                            Strongest Point
+                        </div>
+
+                        <p
+                            id="analysis-strongest"
+                            class="analysis-text">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Weakest Point -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title">
+                            <span class="analysis-icon">−</span>
+                            Weakest Point
+                        </div>
+
+                        <p
+                            id="analysis-weakest"
+                            class="analysis-text">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Assumptions -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title">
+                            <span class="analysis-icon">02</span>
+                            Assumption
+                        </div>
+
+                        <p
+                            id="analysis-assumptions"
+                            class="analysis-text">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Logical Gap -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title">
+                            <span class="analysis-icon">03</span>
+                            Logical Gap
+                        </div>
+
+                        <p
+                            id="analysis-logical-gaps"
+                            class="analysis-text">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Counter Evidence -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title">
+                            <span class="analysis-icon">04</span>
+                            Counter-Evidence
+                        </div>
+
+                        <p
+                            id="analysis-counter-evidence"
+                            class="analysis-text">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Reasoning Tags -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title mb-3">
+
+                            <span class="analysis-icon">
+                                #
+                            </span>
+
+                            Reasoning Tags
+
+                        </div>
+
+                        <div
+                            id="reasoning-tags"
+                            class="flex flex-wrap gap-1.5">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Challenge Reasons -->
+
+                    <div class="analysis-card">
+
+                        <div class="analysis-card-title mb-3">
+
+                            <span class="analysis-icon">
+                                !
+                            </span>
+
+                            Challenge Reasons
+
+                        </div>
+
+                        <div
+                            id="challenge-reasons"
+                            class="space-y-2">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Next Question -->
+
+                    <div
+                        class="bg-red-950/20 border border-red-900/40 rounded-xl p-4">
+
+                        <div
+                            class="text-[9px] uppercase tracking-widest font-black text-red-500 mb-2">
+
+                            ARIA Challenge
+
+                        </div>
+
+                        <p
+                            id="next-question"
+                            class="text-xs text-neutral-300 leading-relaxed">
+
+                            —
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </aside>
+
     </div>
 
+
+
+    <!-- =====================================================
+         MOBILE BOTTOM NAV
+    ====================================================== -->
+
+    <nav
+        class="mobile-bottom-nav hidden fixed bottom-0 left-0 right-0 h-16 bg-neutral-950/95 backdrop-blur-xl border-t border-red-950/60 z-50 items-center justify-around">
+
+        <button
+            onclick="scrollChatTop()"
+            class="flex flex-col items-center gap-1 text-red-400">
+
+            <span class="text-sm">⚔</span>
+
+            <span class="text-[8px] uppercase font-bold tracking-wider">
+                Arena
+            </span>
+
+        </button>
+
+
+        <button
+            onclick="scrollToAnalysis()"
+            class="flex flex-col items-center gap-1 text-neutral-500">
+
+            <span class="text-sm">◈</span>
+
+            <span class="text-[8px] uppercase font-bold tracking-wider">
+                Analysis
+            </span>
+
+        </button>
+
+
+        <button
+            onclick="loadRecentDebates()"
+            class="flex flex-col items-center gap-1 text-neutral-500">
+
+            <span class="text-sm">▤</span>
+
+            <span class="text-[8px] uppercase font-bold tracking-wider">
+                History
+            </span>
+
+        </button>
+
+
+        <button
+            onclick="openSettingsModal()"
+            class="flex flex-col items-center gap-1 text-neutral-500">
+
+            <span class="text-sm">⚙</span>
+
+            <span class="text-[8px] uppercase font-bold tracking-wider">
+                Settings
+            </span>
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         SETTINGS MODAL
+    ====================================================== -->
+
+    <div
+        id="settings-modal"
+        class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md items-center justify-center p-4">
+
+        <div
+            class="bg-neutral-950 border border-red-900/40 rounded-2xl p-6 max-w-md w-full shadow-2xl shadow-red-950/50">
+
+            <div
+                class="flex items-center justify-between border-b border-neutral-900 pb-4 mb-4">
+
+                <div>
+
+                    <div
+                        class="text-sm font-black text-white">
+
+                        Arena Settings
+
+                    </div>
+
+                    <div
+                        class="text-[9px] text-neutral-600 font-mono mt-1">
+
+                        SESSION CONFIGURATION
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    onclick="closeSettingsModal()"
+                    class="text-neutral-600 hover:text-white transition text-lg">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div class="space-y-4">
+
+                <div>
+
+                    <label
+                        class="block text-[9px] uppercase tracking-widest font-black text-neutral-500 mb-2">
+
+                        Gemini API Key
+
+                    </label>
+
+                    <input
+                        type="password"
+                        id="settingsApiKey"
+                        placeholder="AIzaSy..."
+                        class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-xs text-neutral-200 focus:outline-none focus:border-red-600">
+
+                </div>
+
+
+                <div
+                    class="bg-red-950/20 border border-red-900/30 rounded-xl p-3">
+
+                    <div
+                        class="text-[9px] text-red-400 font-bold mb-1">
+
+                        PRIVACY NOTICE
+
+                    </div>
+
+                    <p
+                        class="text-[9px] text-neutral-600 leading-relaxed">
+
+                        Your API key is stored in this browser's local storage
+                        and sent to the Flask backend when making an AI request.
+
+                    </p>
+
+                </div>
+
+
+                <div class="grid grid-cols-2 gap-2">
+
+                    <button
+                        onclick="saveSettings()"
+                        class="py-2.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 rounded-xl text-xs font-bold text-white transition">
+
+                        Save Key
+
+                    </button>
+
+
+                    <button
+                        onclick="removeApiKey()"
+                        class="py-2.5 bg-red-950/30 hover:bg-red-900/40 border border-red-900/30 rounded-xl text-xs font-bold text-red-400 transition">
+
+                        Remove Key
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAGE STYLES
+    ====================================================== -->
+
+    <style>
+
+        .round-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            color: #737373;
+            font-size: 11px;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .round-nav:hover {
+            background: #171717;
+            color: #d4d4d4;
+        }
+
+        .round-nav.active-round {
+            background: rgba(127, 29, 29, 0.22);
+            border-color: rgba(153, 27, 27, 0.35);
+            color: #fca5a5;
+        }
+
+        .round-nav.completed-round {
+            color: #a3a3a3;
+        }
+
+        .round-number {
+            width: 27px;
+            height: 27px;
+            border-radius: 8px;
+            background: #09090b;
+            border: 1px solid #262626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 9px;
+            flex-shrink: 0;
+        }
+
+        .active-round .round-number {
+            background: rgba(127, 29, 29, 0.4);
+            border-color: rgba(220, 38, 38, 0.4);
+            color: #f87171;
+        }
+
+        .round-description {
+            display: block;
+            font-size: 8px;
+            color: #525252;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .round-icon {
+            font-size: 9px;
+            color: #525252;
+        }
+
+        .active-round .round-icon {
+            color: #ef4444;
+        }
+
+
+        .hud-step {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 6px 4px;
+            border-radius: 7px;
+            font-family: monospace;
+            font-size: 8px;
+            font-weight: 700;
+            color: #404040;
+            transition: all 0.3s;
+        }
+
+        .hud-step.active {
+            background: rgba(127, 29, 29, 0.2);
+            color: #f87171;
+        }
+
+        .hud-step.completed {
+            color: #737373;
+        }
+
+
+        .score-card {
+            background: rgba(23, 23, 23, 0.55);
+            border: 1px solid rgba(38, 38, 38, 0.7);
+            border-radius: 10px;
+            padding: 7px;
+            text-align: center;
+        }
+
+        .score-card-user {
+            border-color: rgba(127, 29, 29, 0.3);
+        }
+
+        .score-label {
+            font-size: 8px;
+            color: #525252;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .score-value {
+            font-size: 18px;
+            line-height: 1.2;
+            font-weight: 900;
+            margin-top: 2px;
+        }
+
+
+        .metric-track {
+            width: 100%;
+            height: 4px;
+            background: #171717;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                #b91c1c,
+                #f43f5e
+            );
+            border-radius: 999px;
+            transition: width 0.7s ease;
+        }
+
+
+        .analysis-card {
+            background: #09090b;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .analysis-card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 900;
+            color: #737373;
+            margin-bottom: 9px;
+        }
+
+        .analysis-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(127, 29, 29, 0.25);
+            border: 1px solid rgba(127, 29, 29, 0.35);
+            color: #ef4444;
+            font-family: monospace;
+            font-size: 8px;
+        }
+
+        .analysis-text {
+            color: #a3a3a3;
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+    </style>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script>
+
+        /* =====================================================
+           GLOBAL STATE
+        ===================================================== */
+
         let chatHistory = [];
+
         let currentRound = 1;
+
         let timerSeconds = 0;
+
         let timerInterval = null;
+
         let currentDebateId = null;
 
-        const roundNames = { 1: "Opening Statement", 2: "Counter Argument", 3: "Rebuttal", 4: "Cross Examination", 5: "Closing Statement" };
+        let isSending = false;
 
-        window.onload = function() {
-            if (!localStorage.getItem("debateOS_key")) {
-                window.location.href = "/";
-            }
-            startTimer();
-            updateRoundUI();
-            loadRecentDebates();
+
+        const roundNames = {
+
+            1: "Opening Statement",
+
+            2: "Counter Argument",
+
+            3: "Rebuttal",
+
+            4: "Cross Examination",
+
+            5: "Closing Statement"
+
         };
 
-        async function loadRecentDebates() {
-            try {
-                const res = await fetch("/api/debates");
-                const debates = await res.json();
-                const listEl = document.getElementById("recent-debates-list");
-                listEl.innerHTML = debates.map(d => `
-                    <button onclick="loadDebateTranscript(${d.id})" class="w-full text-left p-2.5 rounded-xl bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-800/80 transition group">
-                        <div class="font-bold text-xs text-white group-hover:text-red-400 truncate">● ${d.topic}</div>
-                        <div class="text-[10px] text-neutral-500 font-mono mt-1">${d.rounds} rounds · ${d.final_score} score</div>
-                    </button>
-                `).join('');
-            } catch(e) { console.error("Could not load history", e); }
-        }
 
-        async function loadDebateTranscript(id) {
-            try {
-                const res = await fetch(`/api/debates/${id}`);
-                const data = await res.json();
-                currentDebateId = id;
-                document.getElementById("topic").value = data.topic;
-                document.getElementById("userStance").value = data.stance;
-                document.getElementById("chat-box").innerHTML = "";
-                
-                data.arguments.forEach(arg => {
-                    appendMessage("user", arg.user_argument);
-                    appendAriaMessage({ reply: arg.ai_response, metrics: { user_score: arg.score, argument_strength: arg.score } });
-                });
-                currentRound = 6;
-                updateRoundUI();
-            } catch(e) { alert("Failed to load transcript."); }
-        }
+        const roundDescriptions = {
+
+            1: "Establish your position clearly.",
+
+            2: "Defend against ARIA's attack.",
+
+            3: "Respond directly to the counterargument.",
+
+            4: "Survive rigorous questioning.",
+
+            5: "Deliver your strongest conclusion."
+
+        };
+
+
+
+        /* =====================================================
+           INITIALIZATION
+        ===================================================== */
+
+        window.onload = function () {
+
+            const apiKey =
+                localStorage.getItem("debateOS_key");
+
+            if (!apiKey) {
+
+                window.location.href = "/";
+
+                return;
+
+            }
+
+            document.getElementById("settingsApiKey").value =
+                apiKey;
+
+            startTimer();
+
+            updateRoundUI();
+
+            loadRecentDebates();
+
+            syncTopic();
+
+            setupCharacterCounter();
+
+        };
+
+
+
+        /* =====================================================
+           TIMER
+        ===================================================== */
 
         function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
+
+            if (timerInterval) {
+
+                clearInterval(timerInterval);
+
+            }
+
             timerInterval = setInterval(() => {
+
                 timerSeconds++;
-                const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
-                const secs = String(timerSeconds % 60).padStart(2, '0');
-                document.getElementById("debate-timer").innerText = `${mins}:${secs}`;
+
+                const mins =
+                    String(
+                        Math.floor(timerSeconds / 60)
+                    ).padStart(2, "0");
+
+                const secs =
+                    String(
+                        timerSeconds % 60
+                    ).padStart(2, "0");
+
+                document.getElementById(
+                    "debate-timer"
+                ).innerText =
+                    `${mins}:${secs}`;
+
             }, 1000);
+
         }
+
+
+
+        /* =====================================================
+           ROUND UI
+        ===================================================== */
 
         function updateRoundUI() {
+
+            const title =
+                document.getElementById(
+                    "hud-round-title"
+                );
+
+            const subtitle =
+                document.getElementById(
+                    "hud-round-subtitle"
+                );
+
+            const badge =
+                document.getElementById(
+                    "hud-live-badge"
+                );
+
+            const progress =
+                document.getElementById(
+                    "round-progress"
+                );
+
+            const input =
+                document.getElementById(
+                    "userInput"
+                );
+
+            const sendBtn =
+                document.getElementById(
+                    "sendBtn"
+                );
+
+
             if (currentRound <= 5) {
-                document.getElementById("hud-round-title").innerText = `● ROUND 0${currentRound} OF 05: ${roundNames[currentRound]}`;
-                document.getElementById("userInput").placeholder = `Enter your Round ${currentRound} (${roundNames[currentRound]})...`;
-            } else {
-                document.getElementById("hud-round-title").innerText = `✓ DEBATE COMPLETE`;
-                document.getElementById("userInput").placeholder = `Debate concluded. Select 'New Debate' to start fresh.`;
-                document.getElementById("userInput").disabled = true;
-                document.getElementById("sendBtn").disabled = true;
-                if (timerInterval) clearInterval(timerInterval);
+
+                title.innerText =
+                    `ROUND 0${currentRound} OF 05: ${roundNames[currentRound].toUpperCase()}`;
+
+                subtitle.innerText =
+                    roundDescriptions[currentRound];
+
+                badge.innerText =
+                    "● LIVE";
+
+                badge.className =
+                    "shrink-0 text-[9px] font-mono text-red-400 bg-red-950/40 px-2.5 py-1 rounded-lg border border-red-900/30 font-bold";
+
+                progress.style.width =
+                    `${currentRound * 20}%`;
+
+                input.placeholder =
+                    `Enter your Round ${currentRound} ${roundNames[currentRound]}...`;
+
+                input.disabled = false;
+
+                sendBtn.disabled = false;
+
+                document.getElementById(
+                    "sidebar-round-count"
+                ).innerText =
+                    `0${currentRound} / 05`;
+
             }
+
+            else {
+
+                title.innerText =
+                    "✓ DEBATE COMPLETE";
+
+                subtitle.innerText =
+                    "Your five-round debate has concluded.";
+
+                badge.innerText =
+                    "✓ COMPLETE";
+
+                badge.className =
+                    "shrink-0 text-[9px] font-mono text-neutral-400 bg-neutral-900 px-2.5 py-1 rounded-lg border border-neutral-800 font-bold";
+
+                progress.style.width =
+                    "100%";
+
+                input.placeholder =
+                    "Debate concluded. Start a new debate to continue.";
+
+                input.disabled = true;
+
+                sendBtn.disabled = true;
+
+                if (timerInterval) {
+
+                    clearInterval(timerInterval);
+
+                }
+
+                document.getElementById(
+                    "sidebar-round-count"
+                ).innerText =
+                    "05 / 05";
+
+            }
+
+
+            updateRoundSteps();
+
         }
+
+
+
+        function updateRoundSteps() {
+
+            for (let i = 1; i <= 5; i++) {
+
+                const hudStep =
+                    document.getElementById(
+                        `hud-step-${i}`
+                    );
+
+                const nav =
+                    document.getElementById(
+                        `round-nav-${i}`
+                    );
+
+
+                hudStep.classList.remove(
+                    "active",
+                    "completed"
+                );
+
+                nav.classList.remove(
+                    "active-round",
+                    "completed-round"
+                );
+
+
+                if (i < currentRound) {
+
+                    hudStep.classList.add(
+                        "completed"
+                    );
+
+                    nav.classList.add(
+                        "completed-round"
+                    );
+
+                    nav.querySelector(
+                        ".round-icon"
+                    ).innerText = "✓";
+
+                }
+
+                else if (i === currentRound) {
+
+                    hudStep.classList.add(
+                        "active"
+                    );
+
+                    nav.classList.add(
+                        "active-round"
+                    );
+
+                    nav.querySelector(
+                        ".round-icon"
+                    ).innerText = "●";
+
+                }
+
+                else {
+
+                    nav.querySelector(
+                        ".round-icon"
+                    ).innerText = "○";
+
+                }
+
+            }
+
+        }
+
+
+
+        function focusRound(round) {
+
+            if (round > currentRound) {
+
+                return;
+
+            }
+
+            const messages =
+                document.querySelectorAll(
+                    "[data-round]"
+                );
+
+            const target =
+                [...messages].find(
+                    el =>
+                        Number(
+                            el.dataset.round
+                        ) === round
+                );
+
+            if (target) {
+
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           TOPIC
+        ===================================================== */
+
+        function syncTopic() {
+
+            const topic =
+                document.getElementById(
+                    "topic"
+                ).value.trim();
+
+            document.getElementById(
+                "sidebar-topic"
+            ).innerText =
+                topic ||
+                "No topic selected.";
+
+        }
+
+
+
+        /* =====================================================
+           CHARACTER COUNTER
+        ===================================================== */
+
+        function setupCharacterCounter() {
+
+            const input =
+                document.getElementById(
+                    "userInput"
+                );
+
+            input.addEventListener(
+                "input",
+                function () {
+
+                    document.getElementById(
+                        "character-count"
+                    ).innerText =
+                        this.value.length;
+
+                }
+            );
+
+        }
+
+
+
+        /* =====================================================
+           TEXTAREA
+        ===================================================== */
+
+        function autoResize(textarea) {
+
+            textarea.style.height = "auto";
+
+            textarea.style.height =
+                Math.min(
+                    textarea.scrollHeight,
+                    128
+                ) + "px";
+
+        }
+
+
+
+        function handleInputKey(event) {
+
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                sendArgument();
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           SEND ARGUMENT
+        ===================================================== */
 
         async function sendArgument() {
-            const apiKey = localStorage.getItem("debateOS_key");
-            const topic = document.getElementById("topic").value.trim();
-            const userStance = document.getElementById("userStance").value;
-            const inputField = document.getElementById("userInput");
-            const userText = inputField.value.trim();
 
-            if (!userText || currentRound > 5) return;
+            if (isSending) {
 
-            appendMessage("user", userText);
-            chatHistory.push({ role: "user", content: `[Round ${currentRound}: ${roundNames[currentRound]}] ${userText}` });
+                return;
+
+            }
+
+
+            const apiKey =
+                localStorage.getItem(
+                    "debateOS_key"
+                );
+
+            const topic =
+                document.getElementById(
+                    "topic"
+                ).value.trim();
+
+            const userStance =
+                document.getElementById(
+                    "userStance"
+                ).value;
+
+            const inputField =
+                document.getElementById(
+                    "userInput"
+                );
+
+            const userText =
+                inputField.value.trim();
+
+
+            if (!apiKey) {
+
+                alert(
+                    "Gemini API key is missing."
+                );
+
+                window.location.href = "/";
+
+                return;
+
+            }
+
+
+            if (!topic) {
+
+                alert(
+                    "Please enter a debate topic."
+                );
+
+                return;
+
+            }
+
+
+            if (!userText) {
+
+                return;
+
+            }
+
+
+            if (currentRound > 5) {
+
+                return;
+
+            }
+
+
+            isSending = true;
+
+            setSendingState(true);
+
+
+            /* ---------------------------------------------
+               USER MESSAGE
+            --------------------------------------------- */
+
+            appendUserMessage(
+                userText,
+                currentRound
+            );
+
+
+            chatHistory.push({
+
+                role: "user",
+
+                content:
+                    `[Round ${currentRound}: ${roundNames[currentRound]}] ${userText}`
+
+            });
+
+
             inputField.value = "";
 
+            inputField.style.height = "auto";
+
+            document.getElementById(
+                "character-count"
+            ).innerText = "0";
+
+
+            showThinking();
+
+
+
             try {
-                const response = await fetch("/api/debate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                   body: JSON.stringify({
-    api_key: apiKey,
-    topic: topic,
-    user_stance: userStance,
-    history: chatHistory,
-    debate_id: currentDebateId,
-    round_number: currentRound
-})
-                });
-                const data = await response.json();
-                if (data.debate_id) currentDebateId = data.debate_id;
 
-                if (data.error) {
-                    alert("Error: " + data.error);
-                } else {
-                    appendAriaMessage(data);
-                    chatHistory.push({ role: "assistant", content: data.reply });
-                    if (data.metrics) {
-                        document.getElementById("ai-score").innerText = data.metrics.ai_score ?? 50;
-                        document.getElementById("user-score").innerText = data.metrics.user_score ?? 50;
-                    }
-                    currentRound++;
-                    updateRoundUI();
-                    loadRecentDebates();
+                const response =
+                    await fetch(
+                        "/api/debate",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    api_key:
+                                        apiKey,
+
+                                    topic:
+                                        topic,
+
+                                    user_stance:
+                                        userStance,
+
+                                    history:
+                                        chatHistory,
+
+                                    debate_id:
+                                        currentDebateId,
+
+                                    round_number:
+                                        currentRound
+
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                hideThinking();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "The server returned an error."
+                    );
+
                 }
-            } catch (err) { alert("Failed to connect: " + err); }
+
+
+                if (data.debate_id) {
+
+                    currentDebateId =
+                        data.debate_id;
+
+                    document.getElementById(
+                        "session-id"
+                    ).innerText =
+                        `#${String(currentDebateId).padStart(4, "0")}`;
+
+                }
+
+
+                appendAriaMessage(
+                    data,
+                    currentRound
+                );
+
+
+                chatHistory.push({
+
+                    role: "assistant",
+
+                    content:
+                        data.reply || ""
+
+                });
+
+
+                updateScores(
+                    data.metrics || {}
+                );
+
+
+                updateAnalysis(
+                    data
+                );
+
+
+                currentRound++;
+
+                updateRoundUI();
+
+                loadRecentDebates();
+
+
+                if (currentRound > 5) {
+
+                    appendCompletionMessage();
+
+                }
+
+            }
+
+            catch (error) {
+
+                hideThinking();
+
+                console.error(
+                    "Debate error:",
+                    error
+                );
+
+
+                appendErrorMessage(
+                    error.message
+                );
+
+            }
+
+            finally {
+
+                isSending = false;
+
+                setSendingState(false);
+
+            }
+
         }
 
-        function appendMessage(sender, text) {
-            const chatBox = document.getElementById("chat-box");
-            const wrapper = document.createElement("div");
-            wrapper.className = `flex flex-col ${sender === 'user' ? 'items-end' : 'items-start'} space-y-1`;
-            const bubble = document.createElement("div");
-            bubble.className = "max-w-[80%] bg-red-700 text-white p-3.5 rounded-2xl rounded-tr-none text-sm leading-relaxed";
-            bubble.textContent = text;
-            wrapper.appendChild(bubble);
+
+
+        /* =====================================================
+           USER MESSAGE
+        ===================================================== */
+
+        function appendUserMessage(
+            text,
+            round
+        ) {
+
+            const chatBox =
+                document.getElementById(
+                    "chat-box"
+                );
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+            wrapper.className =
+                "animate-slide-up flex justify-end";
+
+            wrapper.dataset.round =
+                round;
+
+
+            const content =
+                document.createElement(
+                    "div"
+                );
+
+            content.className =
+                "max-w-[85%] sm:max-w-2xl";
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+            meta.className =
+                "flex items-center justify-end gap-2 mb-1.5 px-1";
+
+            meta.innerHTML = `
+
+                <span class="text-[9px] font-mono text-neutral-700">
+                    ROUND ${String(round).padStart(2, "0")}
+                </span>
+
+                <span class="text-[9px] font-black uppercase tracking-widest text-red-500">
+                    YOU
+                </span>
+
+            `;
+
+
+            const bubble =
+                document.createElement(
+                    "div"
+                );
+
+            bubble.className =
+                "bg-gradient-to-br from-red-700 to-red-800 border border-red-600/30 text-white p-4 rounded-2xl rounded-tr-sm text-xs sm:text-sm leading-relaxed shadow-lg shadow-red-950/20";
+
+            bubble.textContent =
+                text;
+
+
+            content.appendChild(meta);
+
+            content.appendChild(bubble);
+
+            wrapper.appendChild(content);
+
             chatBox.appendChild(wrapper);
-            chatBox.scrollTop = chatBox.scrollHeight;
+
+
+            scrollChat();
+
         }
 
-        function appendAriaMessage(data) {
-            const chatBox = document.getElementById("chat-box");
-            const wrapper = document.createElement("div");
-            wrapper.className = "flex flex-col items-start space-y-3 max-w-2xl w-full";
-            const card = document.createElement("div");
-            card.className = "bg-neutral-900 border border-red-900/40 rounded-2xl p-5 space-y-3 w-full text-sm text-neutral-200";
-            card.innerHTML = marked.parse(data.reply);
-            wrapper.appendChild(card);
-            chatBox.appendChild(wrapper);
-            chatBox.scrollTop = chatBox.scrollHeight;
+
+
+        /* =====================================================
+           ARIA MESSAGE
+        ===================================================== */
+
+        function appendAriaMessage(
+            data,
+            round
+        ) {
+
+            const chatBox =
+                document.getElementById(
+                    "chat-box"
+                );
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+            wrapper.className =
+                "animate-slide-up flex items-start gap-3";
+
+            wrapper.dataset.round =
+                round;
+
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-red-700 to-rose-600 flex items-center justify-center text-xs font-black shadow-lg shadow-red-900/30";
+
+            avatar.innerText = "A";
+
+
+            const content =
+                document.createElement(
+                    "div"
+                );
+
+            content.className =
+                "max-w-[90%] sm:max-w-3xl";
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+            meta.className =
+                "flex items-center gap-2 mb-1.5 px-1";
+
+            meta.innerHTML = `
+
+                <span class="text-[9px] font-black uppercase tracking-widest text-red-500">
+                    ARIA
+                </span>
+
+                <span class="text-neutral-700">
+                    •
+                </span>
+
+                <span class="text-[9px] font-mono text-neutral-600">
+                    ROUND ${String(round).padStart(2, "0")}
+                </span>
+
+            `;
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "bg-neutral-900/90 border border-red-900/30 rounded-2xl rounded-tl-sm p-4 sm:p-5 shadow-lg shadow-red-950/10";
+
+
+            const reply =
+                document.createElement(
+                    "div"
+                );
+
+            reply.className =
+                "aria-text text-xs sm:text-sm text-neutral-200 leading-relaxed whitespace-pre-wrap";
+
+            reply.textContent =
+                data.reply ||
+                "ARIA did not return a response.";
+
+
+            card.appendChild(
+                reply
+            );
+
+
+            if (
+                data.reasoning_tags &&
+                data.reasoning_tags.length
+            ) {
+
+                const tags =
+                    document.createElement(
+                        "div"
+                    );
+
+                tags.className =
+                    "flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-neutral-800";
+
+
+                data.reasoning_tags
+                    .slice(0, 6)
+                    .forEach(tag => {
+
+                        const badge =
+                            document.createElement(
+                                "span"
+                            );
+
+                        badge.className =
+                            "px-2 py-1 rounded-md bg-red-950/30 border border-red-900/30 text-[9px] font-mono text-red-400";
+
+                        badge.textContent =
+                            `# ${tag}`;
+
+                        tags.appendChild(
+                            badge
+                        );
+
+                    });
+
+
+                card.appendChild(
+                    tags
+                );
+
+            }
+
+
+            content.appendChild(
+                meta
+            );
+
+            content.appendChild(
+                card
+            );
+
+            wrapper.appendChild(
+                avatar
+            );
+
+            wrapper.appendChild(
+                content
+            );
+
+            chatBox.appendChild(
+                wrapper
+            );
+
+
+            scrollChat();
+
         }
+
+
+
+        /* =====================================================
+           COMPLETION
+        ===================================================== */
+
+        function appendCompletionMessage() {
+
+            const chatBox =
+                document.getElementById(
+                    "chat-box"
+                );
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+            wrapper.className =
+                "animate-slide-up flex justify-center py-4";
+
+
+            wrapper.innerHTML = `
+
+                <div class="max-w-md w-full bg-red-950/20 border border-red-900/40 rounded-2xl p-5 text-center">
+
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-red-900/30 border border-red-800/40 flex items-center justify-center text-red-400 mb-3">
+                        ✓
+                    </div>
+
+                    <div class="text-xs font-black uppercase tracking-widest text-white">
+                        Debate Complete
+                    </div>
+
+                    <p class="text-[10px] text-neutral-500 mt-2 leading-relaxed">
+                        All five rounds have been completed.
+                        Review the reasoning analysis panel to inspect your performance.
+                    </p>
+
+                    <button
+                        onclick="resetDebate()"
+                        class="mt-4 px-4 py-2 bg-gradient-to-r from-red-700 to-rose-600 rounded-lg text-[10px] font-bold text-white">
+
+                        Start New Debate
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            chatBox.appendChild(
+                wrapper
+            );
+
+            scrollChat();
+
+        }
+
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        function appendErrorMessage(
+            message
+        ) {
+
+            const chatBox =
+                document.getElementById(
+                    "chat-box"
+                );
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+            wrapper.className =
+                "animate-slide-up flex justify-center";
+
+
+            wrapper.innerHTML = `
+
+                <div class="max-w-xl w-full bg-red-950/20 border border-red-900/40 rounded-xl p-4">
+
+                    <div class="flex items-center gap-2 mb-2">
+
+                        <span class="text-red-500">
+                            !
+                        </span>
+
+                        <span class="text-[10px] uppercase tracking-widest font-black text-red-400">
+                            ARIA CONNECTION ERROR
+                        </span>
+
+                    </div>
+
+                    <p class="text-[10px] text-neutral-500 leading-relaxed">
+                        ${escapeHtml(message)}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            chatBox.appendChild(
+                wrapper
+            );
+
+            scrollChat();
+
+        }
+
+
+
+        /* =====================================================
+           THINKING
+        ===================================================== */
+
+        function showThinking() {
+
+            document.getElementById(
+                "thinking-indicator"
+            ).classList.remove(
+                "hidden"
+            );
+
+            scrollChat();
+
+        }
+
+
+        function hideThinking() {
+
+            document.getElementById(
+                "thinking-indicator"
+            ).classList.add(
+                "hidden"
+            );
+
+        }
+
+
+
+        function setSendingState(
+            sending
+        ) {
+
+            const button =
+                document.getElementById(
+                    "sendBtn"
+                );
+
+            const input =
+                document.getElementById(
+                    "userInput"
+                );
+
+
+            if (sending) {
+
+                button.disabled = true;
+
+                button.innerHTML =
+                    `<span class="animate-pulse">...</span>`;
+
+                input.disabled = true;
+
+            }
+
+            else {
+
+                button.innerHTML = "↑";
+
+                input.disabled =
+                    currentRound > 5;
+
+                button.disabled =
+                    currentRound > 5;
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           SCORES
+        ===================================================== */
+
+        function updateScores(
+            metrics
+        ) {
+
+            const aiScore =
+                metrics.ai_score ?? 50;
+
+            const userScore =
+                metrics.user_score ?? 50;
+
+
+            document.getElementById(
+                "ai-score"
+            ).innerText =
+                aiScore;
+
+
+            document.getElementById(
+                "user-score"
+            ).innerText =
+                userScore;
+
+
+            updateMetric(
+                "strength",
+                metrics.argument_strength
+            );
+
+            updateMetric(
+                "evidence",
+                metrics.evidence
+            );
+
+            updateMetric(
+                "logic",
+                metrics.logical_consistency
+            );
+
+            updateMetric(
+                "relevance",
+                metrics.relevance
+            );
+
+            updateMetric(
+                "persuasiveness",
+                metrics.persuasiveness
+            );
+
+
+            updateOverallScore(
+                userScore
+            );
+
+        }
+
+
+
+        function updateMetric(
+            name,
+            value
+        ) {
+
+            value =
+                Number.isFinite(
+                    Number(value)
+                )
+                    ? Number(value)
+                    : 50;
+
+
+            value =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        value
+                    )
+                );
+
+
+            document.getElementById(
+                `metric-${name}`
+            ).innerText =
+                value;
+
+
+            document.getElementById(
+                `bar-${name}`
+            ).style.width =
+                `${value}%`;
+
+        }
+
+
+
+        function updateOverallScore(
+            score
+        ) {
+
+            score =
+                Number(score) || 50;
+
+            score =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        score
+                    )
+                );
+
+
+            document.getElementById(
+                "analysis-overall-score"
+            ).innerText =
+                score;
+
+
+            document.getElementById(
+                "overall-score-bar"
+            ).style.width =
+                `${score}%`;
+
+        }
+
+
+
+        /* =====================================================
+           ANALYSIS
+        ===================================================== */
+
+        function updateAnalysis(
+            data
+        ) {
+
+            document.getElementById(
+                "analysis-empty"
+            ).classList.add(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "analysis-data"
+            ).classList.remove(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "analysis-core-claim"
+            ).innerText =
+                data.core_claim ||
+                "No core claim identified.";
+
+
+            document.getElementById(
+                "analysis-strongest"
+            ).innerText =
+                data.strongest_point ||
+                "No strongest point identified.";
+
+
+            document.getElementById(
+                "analysis-weakest"
+            ).innerText =
+                data.weakest_point ||
+                "No weakest point identified.";
+
+
+            document.getElementById(
+                "analysis-assumptions"
+            ).innerText =
+                data.assumptions ||
+                "No major assumption identified.";
+
+
+            document.getElementById(
+                "analysis-logical-gaps"
+            ).innerText =
+                data.logical_gaps ||
+                "No major logical gap identified.";
+
+
+            document.getElementById(
+                "analysis-counter-evidence"
+            ).innerText =
+                data.counter_evidence ||
+                "No specific counter-evidence identified.";
+
+
+            document.getElementById(
+                "next-question"
+            ).innerText =
+                data.next_question ||
+                "What evidence would strengthen your position?";
+
+
+            const metrics =
+                data.metrics || {};
+
+
+            updateOverallScore(
+                metrics.user_score ?? 50
+            );
+
+
+            document.getElementById(
+                "performance-level"
+            ).innerText =
+                (
+                    data.performance_level ||
+                    "Developing"
+                ).toUpperCase();
+
+
+            renderReasoningTags(
+                data.reasoning_tags || []
+            );
+
+
+            renderChallengeReasons(
+                data.challenge_reasons || []
+            );
+
+
+            document.getElementById(
+                "analysis-content"
+            ).scrollTop = 0;
+
+        }
+
+
+
+        function renderReasoningTags(
+            tags
+        ) {
+
+            const container =
+                document.getElementById(
+                    "reasoning-tags"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (!tags.length) {
+
+                container.innerHTML =
+                    `<span class="text-[9px] text-neutral-700">
+                        No reasoning tags detected.
+                    </span>`;
+
+                return;
+
+            }
+
+
+            tags.forEach(
+                tag => {
+
+                    const span =
+                        document.createElement(
+                            "span"
+                        );
+
+                    span.className =
+                        "px-2 py-1 rounded-md bg-red-950/30 border border-red-900/30 text-[9px] font-mono text-red-400";
+
+                    span.innerText =
+                        tag;
+
+                    container.appendChild(
+                        span
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        function renderChallengeReasons(
+            reasons
+        ) {
+
+            const container =
+                document.getElementById(
+                    "challenge-reasons"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (!reasons.length) {
+
+                container.innerHTML =
+                    `<span class="text-[9px] text-neutral-700">
+                        No challenge reasons returned.
+                    </span>`;
+
+                return;
+
+            }
+
+
+            reasons.forEach(
+                reason => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.className =
+                        "bg-neutral-950 border border-neutral-800 rounded-lg p-3";
+
+
+                    const title =
+                        document.createElement(
+                            "div"
+                        );
+
+                    title.className =
+                        "text-[9px] font-bold text-neutral-300 mb-1";
+
+                    title.innerText =
+                        reason.title ||
+                        "Reason";
+
+
+                    const detail =
+                        document.createElement(
+                            "div"
+                        );
+
+                    detail.className =
+                        "text-[9px] text-neutral-600 leading-relaxed";
+
+                    detail.innerText =
+                        reason.detail ||
+                        "";
+
+
+                    item.appendChild(
+                        title
+                    );
+
+                    item.appendChild(
+                        detail
+                    );
+
+                    container.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =====================================================
+           HISTORY
+        ===================================================== */
+
+        async function loadRecentDebates() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/debates"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load debates."
+                    );
+
+                }
+
+
+                const debates =
+                    await response.json();
+
+
+                const list =
+                    document.getElementById(
+                        "recent-debates-list"
+                    );
+
+
+                if (!debates.length) {
+
+                    list.innerHTML = `
+
+                        <div class="text-[10px] text-neutral-700 text-center py-5">
+                            No previous debates yet.
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                list.innerHTML = "";
+
+
+                debates.forEach(
+                    debate => {
+
+                        const button =
+                            document.createElement(
+                                "button"
+                            );
+
+                        button.className =
+                            "w-full text-left p-3 rounded-xl bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-900 hover:border-red-900/40 transition group";
+
+
+                        button.onclick =
+                            () =>
+                                loadDebateTranscript(
+                                    debate.id
+                                );
+
+
+                        button.innerHTML = `
+
+                            <div class="flex items-start gap-2">
+
+                                <span class="text-red-600 text-[8px] mt-1">
+                                    ●
+                                </span>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <div class="font-bold text-[10px] text-neutral-300 group-hover:text-red-400 truncate">
+                                        ${escapeHtml(debate.topic)}
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-[8px] text-neutral-600 font-mono mt-1">
+
+                                        <span>
+                                            ${debate.rounds} rounds
+                                        </span>
+
+                                        <span>
+                                            ·
+                                        </span>
+
+                                        <span>
+                                            ${debate.final_score}/100
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+
+                        list.appendChild(
+                            button
+                        );
+
+                    }
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "History error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           LOAD TRANSCRIPT
+        ===================================================== */
+
+        async function loadDebateTranscript(
+            id
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/debates/${id}`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Failed to load transcript."
+                    );
+
+                }
+
+
+                currentDebateId =
+                    data.id;
+
+
+                document.getElementById(
+                    "session-id"
+                ).innerText =
+                    `#${String(data.id).padStart(4, "0")}`;
+
+
+                document.getElementById(
+                    "topic"
+                ).value =
+                    data.topic;
+
+
+                document.getElementById(
+                    "userStance"
+                ).value =
+                    data.stance;
+
+
+                syncTopic();
+
+
+                document.getElementById(
+                    "chat-box"
+                ).innerHTML = "";
+
+
+                chatHistory = [];
+
+
+                if (
+                    data.arguments &&
+                    data.arguments.length
+                ) {
+
+                    data.arguments.forEach(
+                        argument => {
+
+                            appendUserMessage(
+                                argument.user_argument,
+                                argument.round_num
+                            );
+
+
+                            chatHistory.push({
+
+                                role: "user",
+
+                                content:
+                                    `[Round ${argument.round_num}: ${roundNames[argument.round_num] || "Debate"}] ${argument.user_argument}`
+
+                            });
+
+
+                            appendAriaMessage(
+
+                                argument.analysis ||
+                                {
+                                    reply:
+                                        argument.ai_response,
+
+                                    metrics: {
+
+                                        user_score:
+                                            argument.score,
+
+                                        argument_strength:
+                                            argument.argument_strength || argument.score,
+
+                                        evidence:
+                                            argument.evidence || 50,
+
+                                        logical_consistency:
+                                            argument.logical_consistency || 50,
+
+                                        relevance:
+                                            argument.relevance || 50,
+
+                                        persuasiveness:
+                                            argument.persuasiveness || 50
+
+                                    }
+
+                                },
+
+                                argument.round_num
+
+                            );
+
+
+                            chatHistory.push({
+
+                                role: "assistant",
+
+                                content:
+                                    argument.ai_response || ""
+
+                            });
+
+
+                            if (
+                                argument.analysis
+                            ) {
+
+                                updateAnalysis(
+                                    argument.analysis
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                    const rounds =
+                        data.arguments.length;
+
+
+                    currentRound =
+                        data.status === "Completed"
+                            ? 6
+                            : Math.min(
+                                rounds + 1,
+                                5
+                            );
+
+
+                    const lastArgument =
+                        data.arguments[
+                            data.arguments.length - 1
+                        ];
+
+
+                    if (
+                        lastArgument &&
+                        lastArgument.analysis
+                    ) {
+
+                        updateScores(
+                            lastArgument.analysis.metrics || {}
+                        );
+
+                    }
+
+                }
+
+                else {
+
+                    currentRound = 1;
+
+                }
+
+
+                updateRoundUI();
+
+                scrollChat();
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Transcript error:",
+                    error
+                );
+
+                alert(
+                    "Failed to load transcript: " +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
 
         function resetDebate() {
+
+            if (
+                currentDebateId &&
+                chatHistory.length
+            ) {
+
+                const confirmed =
+                    confirm(
+                        "Start a new debate? The current debate will remain saved in history."
+                    );
+
+                if (!confirmed) {
+
+                    return;
+
+                }
+
+            }
+
+
             chatHistory = [];
+
             currentRound = 1;
+
             currentDebateId = null;
+
             timerSeconds = 0;
+
+
+            if (timerInterval) {
+
+                clearInterval(
+                    timerInterval
+                );
+
+            }
+
+
             startTimer();
+
+
+            document.getElementById(
+                "session-id"
+            ).innerText =
+                "NEW";
+
+
+            document.getElementById(
+                "chat-box"
+            ).innerHTML = `
+
+                <div class="animate-slide-up flex items-start gap-3">
+
+                    <div class="shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-red-700 to-rose-600 flex items-center justify-center text-xs font-black">
+                        A
+                    </div>
+
+                    <div class="bg-neutral-900/80 border border-red-900/30 rounded-2xl rounded-tl-sm p-4">
+
+                        <div class="text-[9px] font-black uppercase tracking-widest text-red-500 mb-2">
+                            ARIA — SESSION READY
+                        </div>
+
+                        <p class="text-xs text-neutral-300 leading-relaxed">
+                            New debate session initialized.
+                            Present your Round 1 Opening Statement.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            document.getElementById(
+                "analysis-empty"
+            ).classList.remove(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "analysis-data"
+            ).classList.add(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "ai-score"
+            ).innerText =
+                "50";
+
+
+            document.getElementById(
+                "user-score"
+            ).innerText =
+                "50";
+
+
             updateRoundUI();
-            document.getElementById("userInput").disabled = false;
-            document.getElementById("sendBtn").disabled = false;
-            document.getElementById("chat-box").innerHTML = `<div class="bg-neutral-900/60 p-5 rounded-2xl text-xs text-neutral-300">New debate session initialized. Enter your opening statement.</div>`;
+
         }
 
+
+
+        /* =====================================================
+           SETTINGS
+        ===================================================== */
+
         function openSettingsModal() {
-            if(confirm("Click OK to clear your API key.")) { localStorage.removeItem("debateOS_key"); window.location.href = "/"; }
+
+            const modal =
+                document.getElementById(
+                    "settings-modal"
+                );
+
+
+            document.getElementById(
+                "settingsApiKey"
+            ).value =
+                localStorage.getItem(
+                    "debateOS_key"
+                ) || "";
+
+
+            modal.classList.remove(
+                "hidden"
+            );
+
+            modal.classList.add(
+                "flex"
+            );
+
         }
+
+
+
+        function closeSettingsModal() {
+
+            const modal =
+                document.getElementById(
+                    "settings-modal"
+                );
+
+
+            modal.classList.add(
+                "hidden"
+            );
+
+            modal.classList.remove(
+                "flex"
+            );
+
+        }
+
+
+
+        function saveSettings() {
+
+            const key =
+                document.getElementById(
+                    "settingsApiKey"
+                ).value.trim();
+
+
+            if (!key) {
+
+                alert(
+                    "Please enter a valid Gemini API key."
+                );
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "debateOS_key",
+                key
+            );
+
+
+            closeSettingsModal();
+
+
+            alert(
+                "API key saved successfully."
+            );
+
+        }
+
+
+
+        function removeApiKey() {
+
+            const confirmed =
+                confirm(
+                    "Remove your Gemini API key from this browser?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            localStorage.removeItem(
+                "debateOS_key"
+            );
+
+
+            document.getElementById(
+                "settingsApiKey"
+            ).value = "";
+
+
+            closeSettingsModal();
+
+
+            window.location.href = "/";
+
+        }
+
+
+
+        /* =====================================================
+           UTILITIES
+        ===================================================== */
+
+        function scrollChat() {
+
+            const chatBox =
+                document.getElementById(
+                    "chat-box"
+                );
+
+
+            setTimeout(
+                () => {
+
+                    chatBox.scrollTo({
+
+                        top:
+                            chatBox.scrollHeight,
+
+                        behavior:
+                            "smooth"
+
+                    });
+
+                },
+                50
+            );
+
+        }
+
+
+
+        function scrollChatTop() {
+
+            const chatBox =
+                document.getElementById(
+                    "chat-box"
+                );
+
+
+            chatBox.scrollTo({
+
+                top:
+                    chatBox.scrollHeight,
+
+                behavior:
+                    "smooth"
+
+            });
+
+        }
+
+
+
+        function scrollToAnalysis() {
+
+            const panel =
+                document.getElementById(
+                    "analysis-content"
+                );
+
+
+            panel.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        }
+
+
+
+        function escapeHtml(
+            value
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                value ?? "";
+
+            return div.innerHTML;
+
+        }
+
     </script>
+
 </body>
+
 </html>
