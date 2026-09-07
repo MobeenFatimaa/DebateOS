@@ -1,194 +1,2753 @@
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>DebateOS — ARIA Intelligence Matrix</title>
+
+    <meta name="description"
+        content="DebateOS is an AI-powered critical thinking arena where ARIA challenges your arguments, exposes weak reasoning, and helps you become a stronger thinker.">
+
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-black text-neutral-100 min-h-screen flex flex-col font-sans bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/40 via-neutral-950 to-black">
-
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-xl border-b border-red-900/30">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-700 to-rose-600 flex items-center justify-center font-black text-white shadow-lg shadow-red-600/40">
-                    A
-                </div>
-                <span class="font-extrabold tracking-tight text-lg text-white">Debate<span class="text-red-500">OS</span></span>
-            </div>
-            
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
-                <a href="#aria-profile" class="hover:text-red-400 transition">Meet ARIA</a>
-                <a href="#educational-framework" class="hover:text-red-400 transition">Educational Purpose</a>
-                <a href="javascript:void(0)" onclick="openModal()" class="hover:text-red-400 transition">API Settings</a>
-            </div>
-
-            <button onclick="openModal()" class="px-5 py-2 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-medium text-sm rounded-xl shadow-lg shadow-red-600/30 transition active:scale-95">
-                Enter Arena ⚔️
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-6 max-w-5xl mx-auto text-center space-y-8 flex-1 flex flex-col justify-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/60 border border-red-800/40 text-red-400 text-xs font-semibold">
-            <span>⚡ Powered by ARIA (Adversarial Reasoning Intelligence)</span>
-        </div>
-        <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight bg-gradient-to-r from-white via-neutral-200 to-red-400 bg-clip-text text-transparent">
-            Sharpen Your Arguments Against ARIA
-        </h1>
-        <p class="text-neutral-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            "I'll challenge your assumptions, expose weak reasoning, and provide real-time educational breakdowns to master critical thinking."
-        </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <button onclick="openModal()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-bold text-base rounded-xl shadow-xl shadow-red-600/30 transition active:scale-95">
-                Initialize ARIA Arena
-            </button>
-            <a href="#educational-framework" class="w-full sm:w-auto px-8 py-3.5 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold text-base rounded-xl border border-neutral-800 transition">
-                Explore Educational Purpose
-            </a>
-        </div>
-    </section>
-
-    <!-- Educational Framework Preview Section -->
-    <section id="educational-framework" class="py-20 px-6 max-w-4xl mx-auto space-y-8 border-t border-neutral-900">
-        <div class="text-center space-y-3">
-            <h2 class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">LEARNING ARCHITECTURE</h2>
-            <p class="text-2xl sm:text-3xl font-black text-white">Why This Argument Was Challenged</p>
-            <p class="text-sm text-neutral-400 max-w-xl mx-auto">
-                Beyond standard counter-arguments, ARIA exposes structural flaws in your reasoning so you can systematically inspect and expand each critique note.
-            </p>
-        </div>
-
-        <div class="space-y-3 max-w-2xl mx-auto">
-            <!-- Item 1 -->
-            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
-                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
-                    <span class="flex items-center gap-3">
-                        <span class="text-red-500 font-bold">01</span>
-                        <span class="font-semibold text-sm">Unsupported assumption</span>
-                    </span>
-                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
-                </button>
-                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
-                    ARIA detects unverified premises treated as absolute facts, prompting you to justify foundational beliefs before building further conclusions.
-                </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
-                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
-                    <span class="flex items-center gap-3">
-                        <span class="text-red-500 font-bold">02</span>
-                        <span class="font-semibold text-sm">Missing evidence</span>
-                    </span>
-                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
-                </button>
-                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
-                    Identifies generalized claims lacking verifiable citations, empirical metrics, or concrete data points to back up core assertions.
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
-                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
-                    <span class="flex items-center gap-3">
-                        <span class="text-red-500 font-bold">03</span>
-                        <span class="font-semibold text-sm">Weak causal relationship</span>
-                    </span>
-                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
-                </button>
-                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
-                    Highlights logical fallacies where simple correlation is incorrectly mistaken for direct causation without valid bridging mechanisms.
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden transition">
-                <button onclick="toggleLandingReason(this)" class="w-full px-5 py-3.5 flex items-center justify-between text-xs font-mono text-neutral-300 hover:text-red-400 transition text-left">
-                    <span class="flex items-center gap-3">
-                        <span class="text-red-500 font-bold">04</span>
-                        <span class="font-semibold text-sm">Alternative explanation exists</span>
-                    </span>
-                    <span class="text-neutral-500 transform transition-transform duration-200 chevron">▼</span>
-                </button>
-                <div class="hidden px-5 pb-4 text-xs text-neutral-400 font-sans leading-relaxed border-t border-neutral-900 pt-3 bg-black/60">
-                    Exposes competing variables and alternate trajectories that could fully explain the phenomenon just as well or better than your premise.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-neutral-900 bg-black py-8 px-6 text-center text-neutral-600 text-xs">
-        <p>© 2026 DebateOS. Powered by Google Gemini & ARIA Intelligence Engine.</p>
-    </footer>
-
-    <!-- Interactive API Key Modal -->
-    <div id="api-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-neutral-950 border border-red-900/40 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl shadow-red-950/50 relative">
-            <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
-                <h3 class="font-bold text-neutral-100 flex items-center gap-2">🔑 Configure Gemini API Key</h3>
-                <button onclick="closeModal()" class="text-neutral-500 hover:text-neutral-300">✕</button>
-            </div>
-
-            <p class="text-xs text-neutral-400 leading-relaxed">
-                Provide your Gemini API key to launch ARIA. Get a free key at <a href="https://aistudio.google.com/" target="_blank" class="text-red-400 underline">Google AI Studio</a>.
-            </p>
-
-            <div class="space-y-2">
-                <label class="block text-xs font-semibold text-neutral-300">API Key</label>
-                <input type="password" id="modalApiKey" placeholder="Paste your key here (AIzaSy...)" 
-                    class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-2.5 text-sm text-neutral-200 focus:outline-none focus:border-red-600">
-            </div>
-
-            <div class="flex items-center gap-3 pt-2">
-                <button onclick="saveKeyAndProceed()" class="flex-1 py-2.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-semibold text-sm rounded-xl transition">
-                    Save & Continue
-                </button>
-                <button onclick="removeKey()" class="px-4 py-2.5 bg-red-950/40 hover:bg-red-900/50 text-red-400 font-semibold text-sm rounded-xl border border-red-800/40 transition">
-                    Remove Key
-                </button>
-            </div>
-        </div>
-    </div>
 
     <script>
-        function openModal() {
-            const savedKey = localStorage.getItem("debateOS_key") || "";
-            document.getElementById("modalApiKey").value = savedKey;
-            document.getElementById("api-modal").classList.remove("hidden");
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        "fade-up": "fadeUp 0.7s ease-out forwards",
+                        "fade-in": "fadeIn 0.7s ease-out forwards",
+                        "float": "float 5s ease-in-out infinite",
+                        "pulse-slow": "pulseSlow 3s ease-in-out infinite",
+                    },
+
+                    keyframes: {
+                        fadeUp: {
+                            "0%": {
+                                opacity: "0",
+                                transform: "translateY(25px)"
+                            },
+                            "100%": {
+                                opacity: "1",
+                                transform: "translateY(0)"
+                            }
+                        },
+
+                        fadeIn: {
+                            "0%": {
+                                opacity: "0"
+                            },
+                            "100%": {
+                                opacity: "1"
+                            }
+                        },
+
+                        float: {
+                            "0%, 100%": {
+                                transform: "translateY(0)"
+                            },
+                            "50%": {
+                                transform: "translateY(-10px)"
+                            }
+                        },
+
+                        pulseSlow: {
+                            "0%, 100%": {
+                                opacity: "0.4"
+                            },
+                            "50%": {
+                                opacity: "0.8"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
         }
 
-        function closeModal() {
-            document.getElementById("api-modal").classList.add("hidden");
+        body {
+            overflow-x: hidden;
         }
 
-        function saveKeyAndProceed() {
-            const key = document.getElementById("modalApiKey").value.trim();
-            if (!key) return alert("Please enter a valid API Key.");
-            localStorage.setItem("debateOS_key", key);
-            window.location.href = "/debate";
+        ::selection {
+            background: rgba(220, 38, 38, 0.35);
+            color: white;
         }
 
-        function removeKey() {
-            localStorage.removeItem("debateOS_key");
-            document.getElementById("modalApiKey").value = "";
-            alert("API Key removed from browser storage.");
+        .glass {
+            background: rgba(10, 10, 10, 0.68);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
         }
 
-        function toggleLandingReason(btn) {
-            const content = btn.nextElementSibling;
-            const chevron = btn.querySelector('.chevron');
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                chevron.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.add('hidden');
-                chevron.style.transform = 'rotate(0deg)';
+        .gradient-border {
+            position: relative;
+        }
+
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(
+                135deg,
+                rgba(239, 68, 68, 0.45),
+                rgba(255, 255, 255, 0.04),
+                rgba(239, 68, 68, 0.15)
+            );
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .hero-grid {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 55px 55px;
+        }
+
+        .topic-card {
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .topic-card.selected {
+            border-color: rgb(220 38 38);
+            background: rgba(127, 29, 29, 0.25);
+            box-shadow:
+                0 0 0 1px rgba(220, 38, 38, 0.25),
+                0 15px 40px rgba(127, 29, 29, 0.15);
+        }
+
+        .topic-card.selected .topic-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .topic-check {
+            opacity: 0;
+            transform: scale(0.7);
+            transition: all 0.2s ease;
+        }
+
+        .stance-button {
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .stance-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .countdown-warning {
+            animation: pulse-red 1s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
             }
         }
+
+        .modal-enter {
+            animation: modalIn 0.2s ease-out;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease;
+        }
+
+        .faq-content > div {
+            overflow: hidden;
+        }
+
+        .faq-item.open .faq-content {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 1px;
+            background: rgb(248 113 113);
+            transition: width 0.25s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .stat-card {
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(127, 29, 29, 0.8);
+        }
+    </style>
+</head>
+
+
+<body class="bg-black text-neutral-100 min-h-screen font-sans">
+
+    <!-- =====================================================
+         BACKGROUND EFFECTS
+    ====================================================== -->
+
+    <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+
+        <div class="absolute top-[-300px] left-1/2 -translate-x-1/2
+                    w-[700px] h-[700px]
+                    bg-red-900/20 blur-[140px] rounded-full">
+        </div>
+
+        <div class="absolute top-[900px] left-[-250px]
+                    w-[500px] h-[500px]
+                    bg-red-950/20 blur-[130px] rounded-full">
+        </div>
+
+        <div class="absolute top-[1800px] right-[-250px]
+                    w-[500px] h-[500px]
+                    bg-red-950/20 blur-[130px] rounded-full">
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav
+        class="fixed top-0 left-0 w-full z-40 bg-black/75 backdrop-blur-xl border-b border-red-900/30">
+
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
+
+            <a href="#" class="flex items-center gap-3">
+
+                <div
+                    class="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-700 to-rose-600
+                           flex items-center justify-center font-black text-white
+                           shadow-lg shadow-red-600/30">
+                    A
+                </div>
+
+                <span class="font-extrabold tracking-tight text-lg text-white">
+                    Debate<span class="text-red-500">OS</span>
+                </span>
+
+            </a>
+
+
+            <div class="hidden md:flex items-center gap-7 text-sm font-medium text-neutral-400">
+
+                <a href="#aria-profile" class="nav-link hover:text-red-400 transition">
+                    Meet ARIA
+                </a>
+
+                <a href="#how-it-works" class="nav-link hover:text-red-400 transition">
+                    How It Works
+                </a>
+
+                <a href="#educational-framework" class="nav-link hover:text-red-400 transition">
+                    Learning
+                </a>
+
+                <a href="#faq" class="nav-link hover:text-red-400 transition">
+                    FAQ
+                </a>
+
+                <button
+                    onclick="openModal()"
+                    class="nav-link hover:text-red-400 transition">
+                    API Settings
+                </button>
+
+            </div>
+
+
+            <button
+                onclick="openTopicArena()"
+                class="px-4 sm:px-5 py-2 bg-gradient-to-r from-red-700 to-rose-600
+                       hover:from-red-600 hover:to-rose-500
+                       text-white font-medium text-sm rounded-xl
+                       shadow-lg shadow-red-600/30 transition active:scale-95">
+
+                Enter Arena
+
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section
+        class="relative min-h-screen flex items-center pt-28 pb-20 px-6 hero-grid">
+
+        <div class="max-w-6xl mx-auto w-full text-center">
+
+            <div class="max-w-4xl mx-auto">
+
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+                           bg-red-950/50 border border-red-800/40
+                           text-red-400 text-xs font-semibold
+                           animate-fade-in">
+
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+
+                    Powered by ARIA — Adversarial Reasoning Intelligence
+
+                </div>
+
+
+                <h1
+                    class="mt-7 text-4xl sm:text-6xl lg:text-7xl
+                           font-black tracking-tight leading-[1.05]
+                           bg-gradient-to-r from-white via-neutral-200 to-red-400
+                           bg-clip-text text-transparent">
+
+                    Sharpen Your Arguments.
+                    <br>
+
+                    <span class="text-red-500">
+                        Challenge Your Thinking.
+                    </span>
+
+                </h1>
+
+
+                <p
+                    class="mt-7 text-neutral-400 text-base sm:text-lg
+                           max-w-2xl mx-auto leading-relaxed">
+
+                    DebateOS is an AI-powered critical thinking arena where
+                    ARIA challenges your assumptions, exposes weak reasoning,
+                    and pushes you to build stronger arguments.
+
+                </p>
+
+
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-center
+                           gap-4 mt-9">
+
+                    <button
+                        onclick="openTopicArena()"
+                        class="w-full sm:w-auto px-8 py-4
+                               bg-gradient-to-r from-red-700 to-rose-600
+                               hover:from-red-600 hover:to-rose-500
+                               text-white font-bold rounded-xl
+                               shadow-xl shadow-red-900/30
+                               transition active:scale-95">
+
+                        Enter ARIA Arena
+
+                        <span class="ml-2">→</span>
+
+                    </button>
+
+
+                    <a
+                        href="#how-it-works"
+                        class="w-full sm:w-auto px-8 py-4
+                               bg-neutral-900/80 hover:bg-neutral-800
+                               text-neutral-300 font-semibold rounded-xl
+                               border border-neutral-800 transition">
+
+                        See How It Works
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Hero stats -->
+
+            <div
+                class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4
+                       max-w-4xl mx-auto mt-16">
+
+                <div class="stat-card border border-neutral-800 bg-neutral-950/70 rounded-2xl p-5">
+                    <div class="text-2xl font-black text-white">5</div>
+                    <div class="text-xs text-neutral-500 mt-1">Debate Rounds</div>
+                </div>
+
+                <div class="stat-card border border-neutral-800 bg-neutral-950/70 rounded-2xl p-5">
+                    <div class="text-2xl font-black text-white">12+</div>
+                    <div class="text-xs text-neutral-500 mt-1">Starter Topics</div>
+                </div>
+
+                <div class="stat-card border border-neutral-800 bg-neutral-950/70 rounded-2xl p-5">
+                    <div class="text-2xl font-black text-white">AI</div>
+                    <div class="text-xs text-neutral-500 mt-1">Powered Analysis</div>
+                </div>
+
+                <div class="stat-card border border-neutral-800 bg-neutral-950/70 rounded-2xl p-5">
+                    <div class="text-2xl font-black text-white">∞</div>
+                    <div class="text-xs text-neutral-500 mt-1">Custom Arguments</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ARIA PROFILE
+    ====================================================== -->
+
+    <section id="aria-profile" class="py-24 px-6 border-y border-neutral-900">
+
+        <div class="max-w-6xl mx-auto">
+
+            <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+                <div class="reveal">
+
+                    <div class="text-xs font-mono font-bold tracking-widest text-red-500 mb-4">
+                        MEET ARIA
+                    </div>
+
+                    <h2 class="text-3xl sm:text-4xl font-black text-white leading-tight">
+                        Your argument's
+                        <span class="text-red-500">
+                            toughest opponent.
+                        </span>
+                    </h2>
+
+                    <p class="mt-5 text-neutral-400 leading-relaxed">
+                        ARIA is designed to challenge your reasoning rather than
+                        simply agree with your conclusions. It examines the
+                        structure of your argument and identifies areas that
+                        deserve stronger evidence or deeper consideration.
+                    </p>
+
+
+                    <div class="mt-8 space-y-4">
+
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 rounded-lg bg-red-950/60 border border-red-900/50
+                                        flex items-center justify-center text-red-400 shrink-0">
+                                01
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-white">
+                                    Challenges assumptions
+                                </h3>
+
+                                <p class="text-sm text-neutral-500 mt-1">
+                                    Questions premises that may be treated as facts
+                                    without sufficient justification.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 rounded-lg bg-red-950/60 border border-red-900/50
+                                        flex items-center justify-center text-red-400 shrink-0">
+                                02
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-white">
+                                    Searches for reasoning gaps
+                                </h3>
+
+                                <p class="text-sm text-neutral-500 mt-1">
+                                    Highlights unsupported jumps between evidence
+                                    and conclusions.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 rounded-lg bg-red-950/60 border border-red-900/50
+                                        flex items-center justify-center text-red-400 shrink-0">
+                                03
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold text-white">
+                                    Encourages deeper thinking
+                                </h3>
+
+                                <p class="text-sm text-neutral-500 mt-1">
+                                    Provides educational breakdowns that help you
+                                    understand why an argument is weak.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ARIA visual -->
+
+                <div class="reveal">
+
+                    <div
+                        class="gradient-border relative rounded-3xl
+                               bg-neutral-950 p-8 sm:p-10
+                               overflow-hidden">
+
+                        <div
+                            class="absolute top-0 right-0 w-40 h-40
+                                   bg-red-600/10 blur-3xl rounded-full">
+                        </div>
+
+                        <div class="relative">
+
+                            <div class="flex items-center justify-between">
+
+                                <div>
+                                    <div class="text-[10px] font-mono tracking-widest text-red-500">
+                                        INTELLIGENCE MATRIX
+                                    </div>
+
+                                    <div class="text-xl font-black text-white mt-1">
+                                        ARIA
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="w-12 h-12 rounded-2xl
+                                           bg-gradient-to-tr from-red-700 to-rose-500
+                                           flex items-center justify-center
+                                           font-black text-xl shadow-lg shadow-red-900/30">
+
+                                    A
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mt-8 space-y-3">
+
+                                <div class="flex items-center justify-between
+                                            bg-black border border-neutral-800
+                                            rounded-xl px-4 py-3">
+
+                                    <span class="text-sm text-neutral-400">
+                                        Assumption analysis
+                                    </span>
+
+                                    <span class="text-red-400 text-xs font-mono">
+                                        ACTIVE
+                                    </span>
+
+                                </div>
+
+
+                                <div class="flex items-center justify-between
+                                            bg-black border border-neutral-800
+                                            rounded-xl px-4 py-3">
+
+                                    <span class="text-sm text-neutral-400">
+                                        Evidence inspection
+                                    </span>
+
+                                    <span class="text-red-400 text-xs font-mono">
+                                        ACTIVE
+                                    </span>
+
+                                </div>
+
+
+                                <div class="flex items-center justify-between
+                                            bg-black border border-neutral-800
+                                            rounded-xl px-4 py-3">
+
+                                    <span class="text-sm text-neutral-400">
+                                        Counter-argument
+                                    </span>
+
+                                    <span class="text-red-400 text-xs font-mono">
+                                        ACTIVE
+                                    </span>
+
+                                </div>
+
+
+                                <div class="flex items-center justify-between
+                                            bg-black border border-neutral-800
+                                            rounded-xl px-4 py-3">
+
+                                    <span class="text-sm text-neutral-400">
+                                        Educational feedback
+                                    </span>
+
+                                    <span class="text-red-400 text-xs font-mono">
+                                        ACTIVE
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="mt-6 p-4 rounded-xl
+                                       bg-red-950/20 border border-red-900/30">
+
+                                <div class="text-[10px] font-mono text-red-500 uppercase tracking-widest">
+                                    SYSTEM STATUS
+                                </div>
+
+                                <div class="flex items-center gap-2 mt-2">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+
+                                    <span class="text-sm text-neutral-300">
+                                        Ready to challenge your reasoning
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOW IT WORKS
+    ====================================================== -->
+
+    <section id="how-it-works" class="py-24 px-6">
+
+        <div class="max-w-6xl mx-auto">
+
+            <div class="text-center max-w-2xl mx-auto reveal">
+
+                <div class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">
+                    THE PROCESS
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-white mt-3">
+                    From opinion to
+                    <span class="text-red-500">
+                        stronger reasoning.
+                    </span>
+                </h2>
+
+                <p class="text-neutral-500 mt-4 leading-relaxed">
+                    DebateOS transforms a simple position into a structured
+                    learning experience through progressive AI-driven challenges.
+                </p>
+
+            </div>
+
+
+            <div class="grid md:grid-cols-3 gap-5 mt-14">
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-7">
+
+                    <div class="text-xs font-mono text-red-500 font-bold">
+                        STEP 01
+                    </div>
+
+                    <div class="w-12 h-12 rounded-xl bg-red-950/50 border border-red-900/40
+                                flex items-center justify-center mt-5 text-xl">
+                        T
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white mt-5">
+                        Choose a Topic
+                    </h3>
+
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        Select from curated debate topics or create a completely
+                        custom proposition.
+                    </p>
+
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-7">
+
+                    <div class="text-xs font-mono text-red-500 font-bold">
+                        STEP 02
+                    </div>
+
+                    <div class="w-12 h-12 rounded-xl bg-red-950/50 border border-red-900/40
+                                flex items-center justify-center mt-5 text-xl">
+                        P
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white mt-5">
+                        Defend Your Position
+                    </h3>
+
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        Choose FOR or AGAINST and construct arguments while
+                        ARIA actively evaluates your reasoning.
+                    </p>
+
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-7">
+
+                    <div class="text-xs font-mono text-red-500 font-bold">
+                        STEP 03
+                    </div>
+
+                    <div class="w-12 h-12 rounded-xl bg-red-950/50 border border-red-900/40
+                                flex items-center justify-center mt-5 text-xl">
+                        A
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white mt-5">
+                        Face ARIA
+                    </h3>
+
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        Progress through increasingly demanding rounds and
+                        learn from every challenge.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ARENA PREVIEW
+    ====================================================== -->
+
+    <section class="py-20 px-6 border-y border-neutral-900 bg-neutral-950/30">
+
+        <div class="max-w-6xl mx-auto">
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 reveal">
+
+                <div>
+
+                    <div class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">
+                        INSIDE THE ARENA
+                    </div>
+
+                    <h2 class="text-3xl font-black text-white mt-3">
+                        Built for progressive challenge.
+                    </h2>
+
+                </div>
+
+                <p class="text-sm text-neutral-500 max-w-md leading-relaxed">
+                    Each round increases the depth of analysis, forcing you to
+                    move beyond surface-level opinions.
+                </p>
+
+            </div>
+
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-12">
+
+                <div class="border border-red-900/40 bg-red-950/15 rounded-2xl p-5">
+                    <div class="text-red-500 font-mono text-xs">ROUND 01</div>
+                    <h3 class="font-bold text-white mt-3">Opening</h3>
+                    <p class="text-xs text-neutral-500 mt-2">
+                        Establish your initial position.
+                    </p>
+                </div>
+
+                <div class="border border-neutral-800 bg-black rounded-2xl p-5">
+                    <div class="text-red-500 font-mono text-xs">ROUND 02</div>
+                    <h3 class="font-bold text-white mt-3">Evidence</h3>
+                    <p class="text-xs text-neutral-500 mt-2">
+                        Support your claims.
+                    </p>
+                </div>
+
+                <div class="border border-neutral-800 bg-black rounded-2xl p-5">
+                    <div class="text-red-500 font-mono text-xs">ROUND 03</div>
+                    <h3 class="font-bold text-white mt-3">Challenge</h3>
+                    <p class="text-xs text-neutral-500 mt-2">
+                        Respond to ARIA's critique.
+                    </p>
+                </div>
+
+                <div class="border border-neutral-800 bg-black rounded-2xl p-5">
+                    <div class="text-red-500 font-mono text-xs">ROUND 04</div>
+                    <h3 class="font-bold text-white mt-3">Counter</h3>
+                    <p class="text-xs text-neutral-500 mt-2">
+                        Defend against alternatives.
+                    </p>
+                </div>
+
+                <div class="border border-neutral-800 bg-black rounded-2xl p-5">
+                    <div class="text-red-500 font-mono text-xs">ROUND 05</div>
+                    <h3 class="font-bold text-white mt-3">Verdict</h3>
+                    <p class="text-xs text-neutral-500 mt-2">
+                        Review your reasoning.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FEATURES
+    ====================================================== -->
+
+    <section class="py-24 px-6">
+
+        <div class="max-w-6xl mx-auto">
+
+            <div class="text-center reveal">
+
+                <div class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">
+                    CORE CAPABILITIES
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-white mt-3">
+                    More than a debate.
+                </h2>
+
+                <p class="text-neutral-500 mt-4 max-w-xl mx-auto">
+                    DebateOS is structured as a learning environment designed
+                    to make your reasoning more deliberate.
+                </p>
+
+            </div>
+
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-14">
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-6">
+                    <div class="text-red-500 text-xl">01</div>
+                    <h3 class="font-bold text-white mt-5">
+                        Adversarial Reasoning
+                    </h3>
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        ARIA actively looks for weaknesses instead of simply
+                        validating your conclusion.
+                    </p>
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-6">
+                    <div class="text-red-500 text-xl">02</div>
+                    <h3 class="font-bold text-white mt-5">
+                        Real-Time Feedback
+                    </h3>
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        Receive immediate challenges and reasoning-focused
+                        feedback throughout the debate.
+                    </p>
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-6">
+                    <div class="text-red-500 text-xl">03</div>
+                    <h3 class="font-bold text-white mt-5">
+                        Custom Topics
+                    </h3>
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        Create your own proposition and explore arguments
+                        beyond the built-in topic library.
+                    </p>
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-6">
+                    <div class="text-red-500 text-xl">04</div>
+                    <h3 class="font-bold text-white mt-5">
+                        Structured Rounds
+                    </h3>
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        A progressive five-round architecture keeps the debate
+                        focused and challenging.
+                    </p>
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-6">
+                    <div class="text-red-500 text-xl">05</div>
+                    <h3 class="font-bold text-white mt-5">
+                        Critical Thinking
+                    </h3>
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        Learn to recognize assumptions, evidence gaps,
+                        causality problems, and alternatives.
+                    </p>
+                </div>
+
+
+                <div class="reveal border border-neutral-800 bg-neutral-950 rounded-2xl p-6">
+                    <div class="text-red-500 text-xl">06</div>
+                    <h3 class="font-bold text-white mt-5">
+                        Gemini Intelligence
+                    </h3>
+                    <p class="text-sm text-neutral-500 mt-2 leading-relaxed">
+                        DebateOS uses Google's Gemini API to power its
+                        conversational reasoning engine.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CRITICAL THINKING SKILLS
+    ====================================================== -->
+
+    <section id="educational-framework" class="py-24 px-6 border-y border-neutral-900">
+
+        <div class="max-w-5xl mx-auto">
+
+            <div class="text-center reveal">
+
+                <div class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">
+                    LEARNING ARCHITECTURE
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-white mt-3">
+                    Why your argument was challenged.
+                </h2>
+
+                <p class="text-sm text-neutral-400 max-w-2xl mx-auto mt-4 leading-relaxed">
+                    ARIA exposes structural weaknesses in your reasoning so
+                    you can systematically inspect and improve your arguments.
+                </p>
+
+            </div>
+
+
+            <div class="space-y-3 max-w-3xl mx-auto mt-12">
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden">
+
+                    <button
+                        onclick="toggleLandingReason(this)"
+                        class="w-full px-5 py-4 flex items-center justify-between text-left">
+
+                        <span class="flex items-center gap-4">
+
+                            <span class="text-red-500 font-mono font-bold">
+                                01
+                            </span>
+
+                            <span class="font-semibold text-neutral-200">
+                                Unsupported assumption
+                            </span>
+
+                        </span>
+
+                        <span class="chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="hidden px-5 pb-5 border-t border-neutral-900">
+
+                        <p class="pt-4 text-sm text-neutral-400 leading-relaxed">
+                            ARIA detects unverified premises treated as absolute
+                            facts, prompting you to justify foundational beliefs
+                            before building further conclusions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden">
+
+                    <button
+                        onclick="toggleLandingReason(this)"
+                        class="w-full px-5 py-4 flex items-center justify-between text-left">
+
+                        <span class="flex items-center gap-4">
+
+                            <span class="text-red-500 font-mono font-bold">
+                                02
+                            </span>
+
+                            <span class="font-semibold text-neutral-200">
+                                Missing evidence
+                            </span>
+
+                        </span>
+
+                        <span class="chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="hidden px-5 pb-5 border-t border-neutral-900">
+
+                        <p class="pt-4 text-sm text-neutral-400 leading-relaxed">
+                            Identifies generalized claims lacking verifiable
+                            citations, empirical metrics, or concrete data
+                            points to support core assertions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden">
+
+                    <button
+                        onclick="toggleLandingReason(this)"
+                        class="w-full px-5 py-4 flex items-center justify-between text-left">
+
+                        <span class="flex items-center gap-4">
+
+                            <span class="text-red-500 font-mono font-bold">
+                                03
+                            </span>
+
+                            <span class="font-semibold text-neutral-200">
+                                Weak causal relationship
+                            </span>
+
+                        </span>
+
+                        <span class="chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="hidden px-5 pb-5 border-t border-neutral-900">
+
+                        <p class="pt-4 text-sm text-neutral-400 leading-relaxed">
+                            Highlights reasoning where correlation is incorrectly
+                            interpreted as direct causation without a valid
+                            bridging mechanism.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl overflow-hidden">
+
+                    <button
+                        onclick="toggleLandingReason(this)"
+                        class="w-full px-5 py-4 flex items-center justify-between text-left">
+
+                        <span class="flex items-center gap-4">
+
+                            <span class="text-red-500 font-mono font-bold">
+                                04
+                            </span>
+
+                            <span class="font-semibold text-neutral-200">
+                                Alternative explanation exists
+                            </span>
+
+                        </span>
+
+                        <span class="chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="hidden px-5 pb-5 border-t border-neutral-900">
+
+                        <p class="pt-4 text-sm text-neutral-400 leading-relaxed">
+                            Exposes competing variables and alternative
+                            explanations that could account for the same
+                            phenomenon.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SKILLS
+    ====================================================== -->
+
+    <section class="py-24 px-6">
+
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+
+            <div class="reveal">
+
+                <div class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">
+                    WHAT YOU DEVELOP
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-white mt-3">
+                    Train the way you think,
+                    <span class="text-red-500">
+                        not just what you know.
+                    </span>
+                </h2>
+
+                <p class="text-neutral-500 mt-5 leading-relaxed">
+                    Strong arguments require more than information. DebateOS
+                    encourages you to examine evidence, question assumptions,
+                    consider alternatives, and communicate your position clearly.
+                </p>
+
+            </div>
+
+
+            <div class="grid sm:grid-cols-2 gap-3 reveal">
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl p-5">
+                    <div class="text-red-500 font-mono text-xs">SKILL 01</div>
+                    <div class="font-bold text-white mt-3">
+                        Logical Reasoning
+                    </div>
+                </div>
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl p-5">
+                    <div class="text-red-500 font-mono text-xs">SKILL 02</div>
+                    <div class="font-bold text-white mt-3">
+                        Evidence Analysis
+                    </div>
+                </div>
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl p-5">
+                    <div class="text-red-500 font-mono text-xs">SKILL 03</div>
+                    <div class="font-bold text-white mt-3">
+                        Counter-Argument
+                    </div>
+                </div>
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl p-5">
+                    <div class="text-red-500 font-mono text-xs">SKILL 04</div>
+                    <div class="font-bold text-white mt-3">
+                        Clear Communication
+                    </div>
+                </div>
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl p-5">
+                    <div class="text-red-500 font-mono text-xs">SKILL 05</div>
+                    <div class="font-bold text-white mt-3">
+                        Assumption Testing
+                    </div>
+                </div>
+
+                <div class="border border-neutral-800 bg-neutral-950 rounded-xl p-5">
+                    <div class="text-red-500 font-mono text-xs">SKILL 06</div>
+                    <div class="font-bold text-white mt-3">
+                        Alternative Thinking
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FAQ
+    ====================================================== -->
+
+    <section id="faq" class="py-24 px-6 border-t border-neutral-900">
+
+        <div class="max-w-3xl mx-auto">
+
+            <div class="text-center reveal">
+
+                <div class="text-xs font-mono font-bold uppercase tracking-widest text-red-500">
+                    FAQ
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-white mt-3">
+                    Frequently asked questions
+                </h2>
+
+            </div>
+
+
+            <div class="space-y-3 mt-12">
+
+                <div class="faq-item border border-neutral-800 bg-neutral-950 rounded-xl">
+
+                    <button
+                        onclick="toggleFAQ(this)"
+                        class="w-full flex items-center justify-between px-5 py-4 text-left">
+
+                        <span class="font-semibold text-neutral-200">
+                            What is DebateOS?
+                        </span>
+
+                        <span class="faq-chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="faq-content">
+                        <div>
+                            <p class="px-5 pb-5 text-sm text-neutral-500 leading-relaxed">
+                                DebateOS is an AI-powered debate and critical-thinking
+                                platform designed to challenge users through structured
+                                argument rounds.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item border border-neutral-800 bg-neutral-950 rounded-xl">
+
+                    <button
+                        onclick="toggleFAQ(this)"
+                        class="w-full flex items-center justify-between px-5 py-4 text-left">
+
+                        <span class="font-semibold text-neutral-200">
+                            Who is ARIA?
+                        </span>
+
+                        <span class="faq-chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="faq-content">
+                        <div>
+                            <p class="px-5 pb-5 text-sm text-neutral-500 leading-relaxed">
+                                ARIA stands for Adversarial Reasoning Intelligence.
+                                It acts as the AI debate opponent responsible for
+                                challenging assumptions and analyzing arguments.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item border border-neutral-800 bg-neutral-950 rounded-xl">
+
+                    <button
+                        onclick="toggleFAQ(this)"
+                        class="w-full flex items-center justify-between px-5 py-4 text-left">
+
+                        <span class="font-semibold text-neutral-200">
+                            Do I need a Gemini API key?
+                        </span>
+
+                        <span class="faq-chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="faq-content">
+                        <div>
+                            <p class="px-5 pb-5 text-sm text-neutral-500 leading-relaxed">
+                                Yes. The current application uses a Gemini API key
+                                to power ARIA's AI responses. The key can be configured
+                                from the API Settings interface.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item border border-neutral-800 bg-neutral-950 rounded-xl">
+
+                    <button
+                        onclick="toggleFAQ(this)"
+                        class="w-full flex items-center justify-between px-5 py-4 text-left">
+
+                        <span class="font-semibold text-neutral-200">
+                            Can I create my own debate topic?
+                        </span>
+
+                        <span class="faq-chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="faq-content">
+                        <div>
+                            <p class="px-5 pb-5 text-sm text-neutral-500 leading-relaxed">
+                                Yes. The arena allows you to enter a custom debate
+                                proposition of up to 255 characters.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item border border-neutral-800 bg-neutral-950 rounded-xl">
+
+                    <button
+                        onclick="toggleFAQ(this)"
+                        class="w-full flex items-center justify-between px-5 py-4 text-left">
+
+                        <span class="font-semibold text-neutral-200">
+                            Is DebateOS designed for learning?
+                        </span>
+
+                        <span class="faq-chevron text-neutral-500 transition-transform">
+                            ▼
+                        </span>
+
+                    </button>
+
+                    <div class="faq-content">
+                        <div>
+                            <p class="px-5 pb-5 text-sm text-neutral-500 leading-relaxed">
+                                Yes. The platform focuses on critical thinking,
+                                evidence evaluation, reasoning quality, and
+                                understanding why an argument may be challenged.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FINAL CTA
+    ====================================================== -->
+
+    <section class="py-28 px-6">
+
+        <div
+            class="max-w-5xl mx-auto relative overflow-hidden
+                   rounded-3xl border border-red-900/40
+                   bg-gradient-to-br from-red-950/50 via-neutral-950 to-black
+                   p-10 sm:p-16 text-center">
+
+            <div
+                class="absolute top-[-100px] left-1/2 -translate-x-1/2
+                       w-80 h-80 bg-red-600/15 blur-[100px] rounded-full">
+            </div>
+
+            <div class="relative">
+
+                <div class="text-xs font-mono font-bold tracking-widest text-red-500">
+                    READY FOR THE CHALLENGE?
+                </div>
+
+                <h2 class="text-3xl sm:text-5xl font-black text-white mt-4">
+                    Your next argument
+                    <br>
+                    starts here.
+                </h2>
+
+                <p class="text-neutral-500 max-w-xl mx-auto mt-5 leading-relaxed">
+                    Pick a position, defend your reasoning, and let ARIA
+                    challenge every assumption.
+                </p>
+
+                <button
+                    onclick="openTopicArena()"
+                    class="mt-8 px-8 py-4
+                           bg-gradient-to-r from-red-700 to-rose-600
+                           hover:from-red-600 hover:to-rose-500
+                           rounded-xl font-bold text-white
+                           shadow-xl shadow-red-900/30
+                           transition active:scale-95">
+
+                    Initialize ARIA Arena →
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="border-t border-neutral-900 bg-black">
+
+        <div class="max-w-7xl mx-auto px-6 py-12">
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+                <!-- Brand -->
+
+                <div class="lg:col-span-2">
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="w-9 h-9 rounded-xl
+                                   bg-gradient-to-tr from-red-700 to-rose-600
+                                   flex items-center justify-center
+                                   font-black text-white">
+
+                            A
+
+                        </div>
+
+                        <span class="font-extrabold text-lg text-white">
+                            Debate<span class="text-red-500">OS</span>
+                        </span>
+
+                    </div>
+
+                    <p class="text-sm text-neutral-600 max-w-md mt-4 leading-relaxed">
+                        An AI-powered critical thinking arena designed to
+                        challenge assumptions, strengthen arguments, and
+                        develop better reasoning.
+                    </p>
+
+                </div>
+
+
+                <!-- Platform -->
+
+                <div>
+
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                        Platform
+                    </h3>
+
+                    <div class="flex flex-col gap-3 mt-5 text-sm text-neutral-600">
+
+                        <a href="#aria-profile" class="hover:text-red-400 transition">
+                            Meet ARIA
+                        </a>
+
+                        <a href="#how-it-works" class="hover:text-red-400 transition">
+                            How It Works
+                        </a>
+
+                        <a href="#educational-framework" class="hover:text-red-400 transition">
+                            Learning
+                        </a>
+
+                        <a href="#faq" class="hover:text-red-400 transition">
+                            FAQ
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Connect -->
+
+                <div>
+
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                        Connect
+                    </h3>
+
+                    <div class="flex flex-col gap-3 mt-5 text-sm">
+
+                        <a
+                            href="https://github.com/MobeenFatimaa"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-neutral-600 hover:text-white transition">
+
+                            GitHub
+
+                        </a>
+
+                        <a
+                            href="https://www.linkedin.com/in/mobeen-fatima-599a35347/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-neutral-600 hover:text-red-400 transition">
+
+                            LinkedIn
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="border-t border-neutral-900 mt-10 pt-7
+                       flex flex-col sm:flex-row
+                       items-center justify-between gap-3">
+
+                <p class="text-xs text-neutral-700">
+                    © 2026 DebateOS. All rights reserved.
+                </p>
+
+                <p class="text-xs text-neutral-700">
+                    Powered by Google Gemini & ARIA Intelligence Engine.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================================
+         TOPIC SELECTION MODAL
+    ====================================================== -->
+
+    <div
+        id="topic-modal"
+        class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md
+               overflow-y-auto p-4">
+
+        <div class="min-h-full flex items-center justify-center">
+
+            <div
+                class="modal-enter bg-neutral-950 border border-red-900/40
+                       rounded-2xl p-6 sm:p-8 max-w-3xl w-full
+                       shadow-2xl shadow-red-950/50">
+
+                <div class="flex items-start justify-between border-b border-neutral-800 pb-5">
+
+                    <div>
+
+                        <div class="text-xs font-mono font-bold tracking-widest text-red-500 mb-2">
+                            ARIA ARENA
+                        </div>
+
+                        <h2 class="text-2xl sm:text-3xl font-black text-white">
+                            Choose Your Debate
+                        </h2>
+
+                        <p class="text-sm text-neutral-500 mt-2">
+                            Select a topic before the countdown expires.
+                        </p>
+
+                    </div>
+
+                    <button
+                        onclick="closeTopicArena()"
+                        class="text-neutral-500 hover:text-white text-xl">
+
+                        ✕
+
+                    </button>
+
+                </div>
+
+
+                <!-- Countdown -->
+
+                <div
+                    class="mt-5 flex items-center justify-between
+                           bg-black border border-neutral-800
+                           rounded-xl px-4 py-3">
+
+                    <div>
+
+                        <p class="text-xs font-semibold text-neutral-300">
+                            Topic Selection Time
+                        </p>
+
+                        <p class="text-[11px] text-neutral-600 mt-1">
+                            Choose a topic and start the arena.
+                        </p>
+
+                    </div>
+
+                    <div
+                        id="topicCountdown"
+                        class="text-2xl font-black font-mono text-red-400">
+
+                        30
+
+                    </div>
+
+                </div>
+
+
+                <!-- Topics -->
+
+                <div class="mt-6">
+
+                    <div class="flex items-center justify-between mb-3">
+
+                        <label class="text-xs font-bold uppercase tracking-wider text-neutral-400">
+                            Select a Topic
+                        </label>
+
+                        <span
+                            id="topicStatus"
+                            class="text-[11px] text-neutral-600">
+
+                            No topic selected
+
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="topicGrid"
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    </div>
+
+                </div>
+
+
+                <!-- Custom Topic -->
+
+                <div class="mt-6">
+
+                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                        Or Create Your Own Topic
+                    </label>
+
+                    <input
+                        id="customTopic"
+                        type="text"
+                        maxlength="255"
+                        placeholder="Example: Should AI-generated content be regulated?"
+                        oninput="handleCustomTopic()"
+                        class="w-full bg-black border border-neutral-800
+                               rounded-xl px-4 py-3 text-sm text-neutral-200
+                               placeholder-neutral-700
+                               focus:outline-none focus:border-red-600 transition">
+
+                    <div class="flex justify-between mt-2 text-[10px] text-neutral-600">
+
+                        <span>
+                            Maximum 255 characters
+                        </span>
+
+                        <span id="customCount">
+                            0 / 255
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Stance -->
+
+                <div class="mt-6">
+
+                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3">
+                        Choose Your Position
+                    </label>
+
+                    <div class="grid grid-cols-2 gap-3">
+
+                        <button
+                            id="stanceFor"
+                            onclick="selectStance('FOR (Pro)')"
+                            class="stance-button border border-neutral-800
+                                   bg-black rounded-xl px-4 py-4 text-left">
+
+                            <div class="text-sm font-bold text-white">
+                                FOR
+                            </div>
+
+                            <div class="text-[11px] text-neutral-600 mt-1">
+                                Pro position
+                            </div>
+
+                        </button>
+
+
+                        <button
+                            id="stanceAgainst"
+                            onclick="selectStance('AGAINST (Con)')"
+                            class="stance-button border border-neutral-800
+                                   bg-black rounded-xl px-4 py-4 text-left">
+
+                            <div class="text-sm font-bold text-white">
+                                AGAINST
+                            </div>
+
+                            <div class="text-[11px] text-neutral-600 mt-1">
+                                Con position
+                            </div>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Selected Topic -->
+
+                <div
+                    id="selectedTopicPreview"
+                    class="hidden mt-5 bg-red-950/20
+                           border border-red-900/30 rounded-xl px-4 py-3">
+
+                    <div class="text-[10px] uppercase tracking-widest text-red-500 font-bold">
+                        Selected Topic
+                    </div>
+
+                    <div
+                        id="selectedTopicText"
+                        class="text-sm font-semibold text-neutral-200 mt-1">
+                    </div>
+
+                </div>
+
+
+                <!-- Start -->
+
+                <div class="mt-6">
+
+                    <button
+                        id="startDebateButton"
+                        onclick="startDebate()"
+                        disabled
+                        class="w-full py-4 rounded-xl font-black text-sm
+                               tracking-wide bg-neutral-900 text-neutral-600
+                               border border-neutral-800
+                               cursor-not-allowed">
+
+                        SELECT A TOPIC TO START
+
+                    </button>
+
+                    <p
+                        id="startHint"
+                        class="text-center text-[10px] text-neutral-600 mt-2">
+
+                        Select a topic and your position to unlock the arena.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         API KEY MODAL
+    ====================================================== -->
+
+    <div
+        id="api-modal"
+        class="hidden fixed inset-0 z-[60] bg-black/85 backdrop-blur-md
+               flex items-center justify-center p-4">
+
+        <div
+            class="modal-enter bg-neutral-950 border border-red-900/40
+                   rounded-2xl p-6 max-w-md w-full space-y-5
+                   shadow-2xl shadow-red-950/50">
+
+            <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
+
+                <h3 class="font-bold text-neutral-100">
+                    Configure Gemini API Key
+                </h3>
+
+                <button
+                    onclick="closeModal()"
+                    class="text-neutral-500 hover:text-white">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <p class="text-xs text-neutral-400 leading-relaxed">
+
+                Provide your Gemini API key to launch ARIA.
+                Get a key from
+
+                <a
+                    href="https://aistudio.google.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-red-400 underline">
+
+                    Google AI Studio
+
+                </a>.
+
+            </p>
+
+
+            <div class="space-y-2">
+
+                <label class="block text-xs font-semibold text-neutral-300">
+                    API Key
+                </label>
+
+                <input
+                    type="password"
+                    id="modalApiKey"
+                    placeholder="Paste your key here (AIzaSy...)"
+                    class="w-full bg-black border border-neutral-800
+                           rounded-xl px-4 py-2.5 text-sm text-neutral-200
+                           focus:outline-none focus:border-red-600">
+
+            </div>
+
+
+            <div class="flex items-center gap-3 pt-2">
+
+                <button
+                    onclick="saveKeyAndProceed()"
+                    class="flex-1 py-2.5
+                           bg-gradient-to-r from-red-700 to-rose-600
+                           hover:from-red-600 hover:to-rose-500
+                           text-white font-semibold text-sm rounded-xl transition">
+
+                    Save & Continue
+
+                </button>
+
+                <button
+                    onclick="removeKey()"
+                    class="px-4 py-2.5 bg-red-950/40
+                           hover:bg-red-900/50 text-red-400
+                           font-semibold text-sm rounded-xl
+                           border border-red-800/40 transition">
+
+                    Remove
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        /* =====================================================
+           TOPIC DATA
+        ====================================================== */
+
+        const debateTopics = [
+
+            {
+                title: "Artificial Intelligence",
+                description: "Should AI development be regulated?",
+                topic: "Artificial intelligence should be heavily regulated."
+            },
+
+            {
+                title: "Social Media",
+                description: "Impact on society and individuals",
+                topic: "Social media does more harm than good."
+            },
+
+            {
+                title: "Education",
+                description: "Traditional vs modern learning",
+                topic: "Universities should make attendance optional."
+            },
+
+            {
+                title: "Climate Change",
+                description: "Policy and individual responsibility",
+                topic: "Governments should impose stricter climate regulations."
+            },
+
+            {
+                title: "Technology",
+                description: "Technology and human dependency",
+                topic: "Modern technology is making humans less independent."
+            },
+
+            {
+                title: "Privacy",
+                description: "Security vs personal freedom",
+                topic: "Governments should have greater access to citizens' digital data."
+            },
+
+            {
+                title: "Remote Work",
+                description: "Future of the workplace",
+                topic: "Remote work is better than traditional office work."
+            },
+
+            {
+                title: "Universal Basic Income",
+                description: "Economics and social welfare",
+                topic: "Governments should provide universal basic income."
+            },
+
+            {
+                title: "Space Exploration",
+                description: "Should humanity invest more?",
+                topic: "Governments should prioritize space exploration."
+            },
+
+            {
+                title: "Free Speech",
+                description: "Limits and responsibilities",
+                topic: "Free speech should have very few restrictions."
+            },
+
+            {
+                title: "Nuclear Energy",
+                description: "Energy and environmental policy",
+                topic: "Nuclear energy should become a major source of electricity."
+            },
+
+            {
+                title: "Four-Day Workweek",
+                description: "Productivity and quality of life",
+                topic: "Companies should adopt a four-day workweek."
+            }
+
+        ];
+
+
+        /* =====================================================
+           STATE
+        ====================================================== */
+
+        let selectedTopic = "";
+        let selectedStance = "";
+        let countdownValue = 30;
+        let countdownTimer = null;
+
+
+        /* =====================================================
+           RENDER TOPICS
+        ====================================================== */
+
+        function renderTopics() {
+
+            const grid = document.getElementById("topicGrid");
+
+            grid.innerHTML = "";
+
+            debateTopics.forEach((item) => {
+
+                const button = document.createElement("button");
+
+                button.type = "button";
+
+                button.className =
+                    "topic-card relative text-left border border-neutral-800 bg-black rounded-xl p-4 hover:border-red-800";
+
+                button.onclick = () => selectTopic(item.topic, button);
+
+                button.innerHTML = `
+
+                    <div class="flex items-start justify-between gap-3">
+
+                        <div>
+
+                            <div class="text-sm font-bold text-neutral-200">
+                                ${item.title}
+                            </div>
+
+                            <div class="text-[11px] text-neutral-600 mt-1 leading-relaxed">
+                                ${item.description}
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="topic-check w-5 h-5 shrink-0 rounded-full
+                                   bg-red-600 text-white text-[10px]
+                                   flex items-center justify-center">
+
+                            ✓
+
+                        </div>
+
+                    </div>
+
+                `;
+
+                grid.appendChild(button);
+
+            });
+
+        }
+
+
+        /* =====================================================
+           TOPIC MODAL
+        ====================================================== */
+
+        function openTopicArena() {
+
+            document
+                .getElementById("topic-modal")
+                .classList.remove("hidden");
+
+            resetTopicSelection();
+            startTopicCountdown();
+
+            document.body.style.overflow = "hidden";
+        }
+
+
+        function closeTopicArena() {
+
+            document
+                .getElementById("topic-modal")
+                .classList.add("hidden");
+
+            stopTopicCountdown();
+
+            document.body.style.overflow = "";
+        }
+
+
+        function resetTopicSelection() {
+
+            selectedTopic = "";
+            selectedStance = "";
+            countdownValue = 30;
+
+            document.getElementById("topicCountdown").textContent = "30";
+
+            document
+                .getElementById("topicCountdown")
+                .classList.remove("countdown-warning");
+
+            document.getElementById("customTopic").value = "";
+            document.getElementById("customCount").textContent = "0 / 255";
+
+            document.getElementById("topicStatus").textContent =
+                "No topic selected";
+
+            document
+                .getElementById("selectedTopicPreview")
+                .classList.add("hidden");
+
+            document
+                .querySelectorAll(".topic-card")
+                .forEach(card => card.classList.remove("selected"));
+
+            document
+                .querySelectorAll(".stance-button")
+                .forEach(button => {
+
+                    button.classList.remove(
+                        "border-red-600",
+                        "bg-red-950/30"
+                    );
+
+                });
+
+            updateStartButton();
+
+        }
+
+
+        /* =====================================================
+           COUNTDOWN
+        ====================================================== */
+
+        function startTopicCountdown() {
+
+            stopTopicCountdown();
+
+            countdownValue = 30;
+
+            updateCountdown();
+
+            countdownTimer = setInterval(() => {
+
+                countdownValue--;
+
+                updateCountdown();
+
+                if (countdownValue <= 0) {
+
+                    stopTopicCountdown();
+
+                    handleCountdownFinished();
+
+                }
+
+            }, 1000);
+
+        }
+
+
+        function stopTopicCountdown() {
+
+            if (countdownTimer) {
+
+                clearInterval(countdownTimer);
+
+                countdownTimer = null;
+
+            }
+
+        }
+
+
+        function updateCountdown() {
+
+            const element =
+                document.getElementById("topicCountdown");
+
+            element.textContent = countdownValue;
+
+            if (countdownValue <= 10) {
+
+                element.classList.add("countdown-warning");
+
+            } else {
+
+                element.classList.remove("countdown-warning");
+
+            }
+
+        }
+
+
+        function handleCountdownFinished() {
+
+            const button =
+                document.getElementById("startDebateButton");
+
+            button.disabled = true;
+
+            button.className =
+                "w-full py-4 rounded-xl font-black text-sm tracking-wide " +
+                "bg-red-950/30 text-red-400 border border-red-900/40";
+
+            button.textContent =
+                "TIME EXPIRED — REOPEN ARENA";
+
+            document
+                .getElementById("startHint")
+                .textContent =
+                "Your topic selection time expired. Close and reopen the arena to start again.";
+
+        }
+
+
+        /* =====================================================
+           TOPIC SELECTION
+        ====================================================== */
+
+        function selectTopic(topic, clickedCard) {
+
+            selectedTopic = topic;
+
+            document.getElementById("customTopic").value = "";
+
+            document.getElementById("customCount").textContent =
+                "0 / 255";
+
+            document
+                .querySelectorAll(".topic-card")
+                .forEach(card => card.classList.remove("selected"));
+
+            clickedCard.classList.add("selected");
+
+            updateSelectedTopicUI();
+            updateStartButton();
+
+        }
+
+
+        /* =====================================================
+           CUSTOM TOPIC
+        ====================================================== */
+
+        function handleCustomTopic() {
+
+            const input =
+                document.getElementById("customTopic");
+
+            const value = input.value.trim();
+
+            document.getElementById("customCount").textContent =
+                `${input.value.length} / 255`;
+
+            if (value) {
+
+                selectedTopic = value;
+
+                document
+                    .querySelectorAll(".topic-card")
+                    .forEach(card => card.classList.remove("selected"));
+
+                updateSelectedTopicUI();
+
+            } else {
+
+                selectedTopic = "";
+
+                document
+                    .getElementById("selectedTopicPreview")
+                    .classList.add("hidden");
+
+                document
+                    .getElementById("topicStatus")
+                    .textContent =
+                    "No topic selected";
+
+            }
+
+            updateStartButton();
+
+        }
+
+
+        /* =====================================================
+           SELECTED TOPIC UI
+        ====================================================== */
+
+        function updateSelectedTopicUI() {
+
+            const preview =
+                document.getElementById("selectedTopicPreview");
+
+            const text =
+                document.getElementById("selectedTopicText");
+
+            const status =
+                document.getElementById("topicStatus");
+
+            if (!selectedTopic) {
+
+                preview.classList.add("hidden");
+
+                status.textContent =
+                    "No topic selected";
+
+                return;
+
+            }
+
+            preview.classList.remove("hidden");
+
+            text.textContent = selectedTopic;
+
+            status.textContent =
+                "Topic selected ✓";
+
+        }
+
+
+        /* =====================================================
+           STANCE
+        ====================================================== */
+
+        function selectStance(stance) {
+
+            selectedStance = stance;
+
+            const forButton =
+                document.getElementById("stanceFor");
+
+            const againstButton =
+                document.getElementById("stanceAgainst");
+
+            forButton.classList.remove(
+                "border-red-600",
+                "bg-red-950/30"
+            );
+
+            againstButton.classList.remove(
+                "border-red-600",
+                "bg-red-950/30"
+            );
+
+            if (stance === "FOR (Pro)") {
+
+                forButton.classList.add(
+                    "border-red-600",
+                    "bg-red-950/30"
+                );
+
+            } else {
+
+                againstButton.classList.add(
+                    "border-red-600",
+                    "bg-red-950/30"
+                );
+
+            }
+
+            updateStartButton();
+
+        }
+
+
+        /* =====================================================
+           START BUTTON
+        ====================================================== */
+
+        function updateStartButton() {
+
+            const button =
+                document.getElementById("startDebateButton");
+
+            const hint =
+                document.getElementById("startHint");
+
+            const expired =
+                countdownValue <= 0;
+
+            if (
+                selectedTopic &&
+                selectedStance &&
+                !expired
+            ) {
+
+                button.disabled = false;
+
+                button.className =
+                    "w-full py-4 rounded-xl font-black text-sm " +
+                    "tracking-wide bg-gradient-to-r from-red-700 to-rose-600 " +
+                    "hover:from-red-600 hover:to-rose-500 text-white " +
+                    "shadow-xl shadow-red-900/30 transition active:scale-[0.99]";
+
+                button.textContent =
+                    "START DEBATE";
+
+                hint.textContent =
+                    "Your topic and position are ready. Enter the arena.";
+
+                return;
+
+            }
+
+            button.disabled = true;
+
+            button.className =
+                "w-full py-4 rounded-xl font-black text-sm tracking-wide " +
+                "transition-all bg-neutral-900 text-neutral-600 " +
+                "border border-neutral-800 cursor-not-allowed";
+
+            if (!selectedTopic) {
+
+                button.textContent =
+                    "SELECT A TOPIC TO START";
+
+                hint.textContent =
+                    "Select a topic and your position to unlock the arena.";
+
+            } else if (!selectedStance) {
+
+                button.textContent =
+                    "SELECT YOUR POSITION";
+
+                hint.textContent =
+                    "Choose FOR or AGAINST to continue.";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           START DEBATE
+        ====================================================== */
+
+        function startDebate() {
+
+            if (!selectedTopic) {
+
+                alert("Please select a debate topic first.");
+
+                return;
+
+            }
+
+            if (!selectedStance) {
+
+                alert("Please choose FOR or AGAINST.");
+
+                return;
+
+            }
+
+            if (countdownValue <= 0) {
+
+                alert(
+                    "Your topic selection time has expired. Please reopen the arena."
+                );
+
+                return;
+
+            }
+
+            const apiKey =
+                localStorage.getItem("debateOS_key");
+
+            localStorage.setItem(
+                "debateOS_topic",
+                selectedTopic
+            );
+
+            localStorage.setItem(
+                "debateOS_stance",
+                selectedStance
+            );
+
+            if (apiKey) {
+
+                stopTopicCountdown();
+
+                window.location.href = "/debate";
+
+                return;
+
+            }
+
+            stopTopicCountdown();
+
+            closeTopicArena();
+
+            openModal();
+
+        }
+
+
+        /* =====================================================
+           API MODAL
+        ====================================================== */
+
+        function openModal() {
+
+            const savedKey =
+                localStorage.getItem("debateOS_key") || "";
+
+            document.getElementById("modalApiKey").value =
+                savedKey;
+
+            document
+                .getElementById("api-modal")
+                .classList.remove("hidden");
+
+            document.body.style.overflow = "hidden";
+
+        }
+
+
+        function closeModal() {
+
+            document
+                .getElementById("api-modal")
+                .classList.add("hidden");
+
+            document.body.style.overflow = "";
+
+        }
+
+
+        /* =====================================================
+           SAVE API KEY
+        ====================================================== */
+
+        function saveKeyAndProceed() {
+
+            const key =
+                document
+                    .getElementById("modalApiKey")
+                    .value
+                    .trim();
+
+            if (!key) {
+
+                alert("Please enter a valid API Key.");
+
+                return;
+
+            }
+
+            localStorage.setItem(
+                "debateOS_key",
+                key
+            );
+
+            if (!selectedTopic) {
+
+                const savedTopic =
+                    localStorage.getItem("debateOS_topic");
+
+                if (savedTopic) {
+                    selectedTopic = savedTopic;
+                }
+
+            }
+
+            if (!localStorage.getItem("debateOS_stance")) {
+
+                const savedStance =
+                    localStorage.getItem("debateOS_stance");
+
+                if (savedStance) {
+                    selectedStance = savedStance;
+                }
+
+            }
+
+            window.location.href = "/debate";
+
+        }
+
+
+        /* =====================================================
+           REMOVE API KEY
+        ====================================================== */
+
+        function removeKey() {
+
+            localStorage.removeItem("debateOS_key");
+
+            document.getElementById("modalApiKey").value = "";
+
+            alert("API Key removed from browser storage.");
+
+        }
+
+
+        /* =====================================================
+           EDUCATIONAL ACCORDION
+        ====================================================== */
+
+        function toggleLandingReason(btn) {
+
+            const content =
+                btn.nextElementSibling;
+
+            const chevron =
+                btn.querySelector(".chevron");
+
+            if (content.classList.contains("hidden")) {
+
+                content.classList.remove("hidden");
+
+                chevron.style.transform =
+                    "rotate(180deg)";
+
+            } else {
+
+                content.classList.add("hidden");
+
+                chevron.style.transform =
+                    "rotate(0deg)";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           FAQ
+        ====================================================== */
+
+        function toggleFAQ(button) {
+
+            const item =
+                button.closest(".faq-item");
+
+            item.classList.toggle("open");
+
+        }
+
+
+        /* =====================================================
+           SCROLL REVEAL
+        ====================================================== */
+
+        function initializeRevealAnimations() {
+
+            const elements =
+                document.querySelectorAll(".reveal");
+
+            const observer =
+                new IntersectionObserver(
+                    entries => {
+
+                        entries.forEach(entry => {
+
+                            if (entry.isIntersecting) {
+
+                                entry.target.classList.add("active");
+
+                                observer.unobserve(entry.target);
+
+                            }
+
+                        });
+
+                    },
+                    {
+                        threshold: 0.12
+                    }
+                );
+
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+
+        }
+
+
+        /* =====================================================
+           ESC KEY
+        ====================================================== */
+
+        document.addEventListener("keydown", event => {
+
+            if (event.key === "Escape") {
+
+                closeTopicArena();
+                closeModal();
+
+            }
+
+        });
+
+
+        /* =====================================================
+           INITIAL PAGE SETUP
+        ====================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                renderTopics();
+
+                initializeRevealAnimations();
+
+            }
+        );
+
     </script>
+
 </body>
+
 </html>
