@@ -15,9 +15,14 @@ from google.genai import types
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///debates.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# Use /tmp on Vercel (writable), local instance folder for development
+if os.environ.get("VERCEL"):
+  db_path = os.path.join("/tmp", "debates.db")
+else:
+  db_path = "sqlite:///debates.db"
 
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}" if os.environ.get("VERCEL") else "sqlite:///debates.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
